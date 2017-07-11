@@ -21,37 +21,61 @@ import FlatButton from 'material-ui/FlatButton';
 import Drawer from 'material-ui/Drawer';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-import { connect } from 'react-redux';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import IconButton from 'material-ui/IconButton';
 import Popover from 'material-ui/Popover';
 
-class BaseHeader extends React.Component {
+export default class Header extends React.Component {
+  static defaultProps = {
+    showMainMenu: false,
+    showUserMenu: false,
+    onCloseUserMenu: () => {},
+    onMainMenuToggle: () => {},
+    onOpenUserMenu: e => {}
+  }
+
   render() {
+    const {
+      history,
+      onMainMenuToggle,
+      onOpenUserMenu,
+      onCloseUserMenu
+    } = this.props;
+    const pushAndToggle = route => {
+      return e => {
+        history.push(route);
+        onMainMenuToggle();
+      }
+    };
+
     return (
       <div>
         <AppBar title="MultiTasking Cubes"
                 iconElementRight={<FlatButton label="User"/>}
-                onLeftIconButtonTouchTap={e => this.props.onMainMenuToggle()}
-                onRightIconButtonTouchTap={e => this.props.onOpenUserMenu(e) }
+                onLeftIconButtonTouchTap={e => onMainMenuToggle()}
+                onRightIconButtonTouchTap={e => onOpenUserMenu(e)}
         />
         <Drawer open={this.props.showMainMenu}
                 docked={false}
-                onRequestChange={e => this.props.onMainMenuToggle()}
+                onRequestChange={e => onMainMenuToggle()}
         >
           <AppBar title="MTC"
                   showMenuIconButton={false}
                   iconElementRight={<IconButton><NavigationClose/></IconButton>}
-                  onRightIconButtonTouchTap={e => this.props.onMainMenuToggle()}
+                  onRightIconButtonTouchTap={e => onMainMenuToggle()}
           />
-          <MenuItem onTouchTap={e => this.props.onMainMenuToggle()}>Sesiones pendientes</MenuItem>
-          <MenuItem onTouchTap={e => this.props.onMainMenuToggle()}>Sesiones completas</MenuItem>
+          <MenuItem onTouchTap={ pushAndToggle('/') }>
+            Home
+          </MenuItem>
+          <MenuItem onTouchTap={ pushAndToggle('/completed') }>
+            Completed
+          </MenuItem>
         </Drawer>
         <Popover open={this.props.showUserMenu}
                  anchorEl={this.props.userMenuTarget}
                  anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                  targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                 onRequestClose={e => { console.log(e); this.props.onCloseUserMenu(); }}
+                 onRequestClose={e => onCloseUserMenu()}
         >
           <Menu>
             <MenuItem>Settings</MenuItem>
@@ -62,33 +86,3 @@ class BaseHeader extends React.Component {
     );
   }
 }
-
-const mapStateToProps = state => {
-  return {
-    showMainMenu: state.showMainMenu,
-    showUserMenu: state.showUserMenu,
-    userMenuTarget: state.userMenuTarget
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    onMainMenuToggle: () => {
-      dispatch({ type: 'TOGGLE_MAIN_MENU' });
-    },
-    onOpenUserMenu: (e) => {
-      e.preventDefault();
-      dispatch({ type: 'OPEN_USER_MENU', target: e.currentTarget });
-    },
-    onCloseUserMenu: () => {
-      dispatch({ type: 'CLOSE_USER_MENU' });
-    }
-  };
-};
-
-const Header = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(BaseHeader);
-
-export default Header;

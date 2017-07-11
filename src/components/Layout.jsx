@@ -17,66 +17,74 @@
  */
 import React from 'react';
 import Header from './Header.jsx';
-import Paper from 'material-ui/Paper';
-import SessionCard from './SessionCard.jsx';
-import Grid from 'react-bootstrap/lib/Grid';
-import Row from 'react-bootstrap/lib/Row';
-import Col from 'react-bootstrap/lib/Col';
 import { connect } from 'react-redux';
+import SessionList from './SessionList.jsx';
+import { withRouter } from 'react-router';
+import {
+  HashRouter as Router,
+  Route
+} from 'react-router-dom';
 
-const style = {
-  column: {
-    paddingRight: 0,
-    paddingLeft: 0
-  },
-  paper: function(index) {
-    return {
-      margin: 10,
-      minWidth: 100,
-      borderRadius: '10px',
-      animationDuration: '1s',
-      animationDelay: (0.25 * index) + 's'
-    }
-  }
-};
-
-class BaseLayout extends React.Component {
-  render() {
-    return (
-      <div>
-        <Grid fluid>
-          <Row>
-            <Col style={style.column}>
-              <Header/>
-            </Col>
-          </Row>
-
-          {this.props.sessions.map((session, index) => (
-            <Row key={index}>
-              <Col style={style.column} md={8} lg={6} mdOffset={2} lgOffset={3}>
-                <Paper style={style.paper(index)} zDepth={2} className="animated fadeIn">
-                  <SessionCard session={session}/>
-                </Paper>
-              </Col>
-            </Row>
-          ))}
-
-        </Grid>
-      </div>
-    );
-  }
-};
-
-
-const mapStateToProps = state => {
+const mapStateToPropsSessionList = state => {
   return {
-    sessions: state.sessions,
-    showMenu: state.showMenu
+    sessions: state.sessions
   };
 };
 
-const Layout = connect(
-  mapStateToProps
-)(BaseLayout);
+const mapStateToPropsCompletedSessionList = state => {
+  return {
+    sessions: state.completedSessions
+  };
+};
+
+const mapStateToPropsHeader = state => {
+  return {
+    showMainMenu: state.showMainMenu,
+    showUserMenu: state.showUserMenu,
+    userMenuTarget: state.userMenuTarget
+  };
+};
+
+const mapDispatchToPropsHeader = dispatch => {
+  return {
+    onMainMenuToggle: () => {
+      dispatch({ type: 'TOGGLE_MAIN_MENU' });
+    },
+    onOpenUserMenu: (e) => {
+      e.preventDefault();
+      dispatch({ type: 'OPEN_USER_MENU', target: e.currentTarget });
+    },
+    onCloseUserMenu: () => {
+      dispatch({ type: 'CLOSE_USER_MENU' });
+    }
+  };
+};
+
+const ConnectedHeader = withRouter(connect(
+  mapStateToPropsHeader,
+  mapDispatchToPropsHeader
+)(Header));
+
+const ConnectedSessionList = connect(
+  mapStateToPropsSessionList
+)(SessionList);
+
+const ConnectedCompletedSessionList = connect(
+  mapStateToPropsCompletedSessionList
+)(SessionList);
+
+class Layout extends React.Component {
+  render() {
+    return (
+      <Router>
+        <div>
+            <ConnectedHeader/>
+            <Route exact path="/" component={ConnectedSessionList}/>
+            <Route exact path="/completed" component={ConnectedCompletedSessionList}/>
+        </div>
+      </Router>
+    );
+  }
+};
 
 export default Layout;

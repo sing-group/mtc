@@ -15,15 +15,15 @@
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-import ReactDOM from 'react-dom';
-import App from '../components/App.jsx';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-import UserMenuReducer from '../reducers/UserMenuReducer.js';
-import MainMenuReducer from '../reducers/MainMenuReducer.js';
-import Reducer from '../reducers/Reducer.js';
+import React from "react";
+import {createStore} from "redux";
+import {Provider} from "react-redux";
+import ReactDOM from "react-dom";
+import App from "../components/App.jsx";
+import injectTapEventPlugin from "react-tap-event-plugin";
+import UserMenuReducer from "../reducers/UserMenuReducer.js";
+import MainMenuReducer from "../reducers/MainMenuReducer.js";
+import Reducer from "../reducers/Reducer.js";
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -43,6 +43,23 @@ const store = createStore(
       {
         id: 2,
         title: 'Session 2',
+        description: 'Nam tempor ex vitae elit euismod dapibus. Nam ornare nulla nec lectus vestibulum, dictum aliquet turpis commodo.'
+      }
+    ],
+    completedSessions: [
+      {
+        id: 3,
+        title: 'Session 3',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc auctor nisl est, nec feugiat mi vehicula non.'
+      },
+      {
+        id: 4,
+        title: 'Session 4',
+        description: 'Nam tempor ex vitae elit euismod dapibus. Nam ornare nulla nec lectus vestibulum, dictum aliquet turpis commodo.'
+      },
+      {
+        id: 5,
+        title: 'Session 5',
         description: 'Nam tempor ex vitae elit euismod dapibus. Nam ornare nulla nec lectus vestibulum, dictum aliquet turpis commodo.'
       }
     ]
