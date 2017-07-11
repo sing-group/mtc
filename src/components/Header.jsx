@@ -17,13 +17,18 @@
  */
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
-import FlatButton from 'material-ui/FlatButton';
 import Drawer from 'material-ui/Drawer';
-import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import IconButton from 'material-ui/IconButton';
-import Popover from 'material-ui/Popover';
+import IconMenu from 'material-ui/IconMenu';
+import Divider from 'material-ui/Divider';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import ActionLanguage from 'material-ui/svg-icons/action/language';
+import { FormattedMessage } from 'react-intl';
+import es_ES from '../i18n/es_ES.js';
+import gl_ES from '../i18n/gl_ES.js';
+import en_US from '../i18n/en_US.js';
 
 export default class Header extends React.Component {
   static defaultProps = {
@@ -31,15 +36,18 @@ export default class Header extends React.Component {
     showUserMenu: false,
     onCloseUserMenu: () => {},
     onMainMenuToggle: () => {},
-    onOpenUserMenu: e => {}
-  }
+    onOpenUserMenu: e => {},
+    onLanguageChange: (locale, messages) => {}
+  };
 
   render() {
     const {
       history,
+      intl,
       onMainMenuToggle,
       onOpenUserMenu,
-      onCloseUserMenu
+      onCloseUserMenu,
+      onLanguageChange
     } = this.props;
     const pushAndToggle = route => {
       return e => {
@@ -47,13 +55,42 @@ export default class Header extends React.Component {
         onMainMenuToggle();
       }
     };
+    
+    const iconStyle = {
+      color: 'white !important'
+    };
+
+    const languageMenu = (
+      <div>
+        <IconMenu iconButtonElement={<IconButton><ActionLanguage color="white"/></IconButton>}
+                  anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+                  targetOrigin={{horizontal: 'right', vertical: 'top'}}
+        >
+          <MenuItem primaryText="en" onTouchTap={e => onLanguageChange('en', en_US)}/>
+          <MenuItem primaryText="es" onTouchTap={e => onLanguageChange('es', es_ES)}/>
+          <MenuItem primaryText="gl" onTouchTap={e => onLanguageChange('gl', gl_ES)}/>
+        </IconMenu>
+
+        <IconMenu iconButtonElement={<IconButton><MoreVertIcon color="white"/></IconButton>}
+                  anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+                  targetOrigin={{horizontal: 'right', vertical: 'top'}}
+        >
+          <MenuItem>
+            <FormattedMessage id="settings"/>
+          </MenuItem>
+          <Divider/>
+          <MenuItem>
+            <FormattedMessage id="exit"/>
+          </MenuItem>
+        </IconMenu>
+      </div>
+    );
 
     return (
       <div>
         <AppBar title="MultiTasking Cubes"
-                iconElementRight={<FlatButton label="User"/>}
+                iconElementRight={languageMenu}
                 onLeftIconButtonTouchTap={e => onMainMenuToggle()}
-                onRightIconButtonTouchTap={e => onOpenUserMenu(e)}
         />
         <Drawer open={this.props.showMainMenu}
                 docked={false}
@@ -65,23 +102,12 @@ export default class Header extends React.Component {
                   onRightIconButtonTouchTap={e => onMainMenuToggle()}
           />
           <MenuItem onTouchTap={ pushAndToggle('/') }>
-            Home
+            <FormattedMessage id="openSessions"/>
           </MenuItem>
           <MenuItem onTouchTap={ pushAndToggle('/completed') }>
-            Completed
+            <FormattedMessage id="completedSessions"/>
           </MenuItem>
         </Drawer>
-        <Popover open={this.props.showUserMenu}
-                 anchorEl={this.props.userMenuTarget}
-                 anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
-                 targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                 onRequestClose={e => onCloseUserMenu()}
-        >
-          <Menu>
-            <MenuItem>Settings</MenuItem>
-            <MenuItem>Exit</MenuItem>
-          </Menu>
-        </Popover>
       </div>
     );
   }

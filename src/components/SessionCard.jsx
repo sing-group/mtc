@@ -20,6 +20,7 @@ import {Card, CardActions, CardText, CardTitle} from "material-ui/Card";
 import {green300, white} from "material-ui/styles/colors";
 import FlatButton from "material-ui/FlatButton";
 import LinearProgress from "material-ui/LinearProgress";
+import { FormattedMessage } from 'react-intl';
 
 const style = {
   actions: {
@@ -44,7 +45,7 @@ export default class SessionCard extends React.Component {
         <CardText>{this.props.session.description}</CardText>
         <LinearProgress mode="determinate" value={1} max={3}/>
         <CardActions style={style.actions}>
-          <FlatButton label="Empezar"/>
+          <FlatButton label={<FormattedMessage id="start"/>}/>
         </CardActions>
       </Card>
     );

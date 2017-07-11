@@ -33,7 +33,7 @@ export default class Reducer {
         this.reducer = { reduce: (state) => state };
       }
 
-      reduce(state, action) {
+      reduce(state = {}, action) {
         if (action && action.type) {
           const method = action.type.toLowerCase()
             .replace(/_[a-z]/g, letter => letter.charAt(1).toUpperCase());

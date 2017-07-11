@@ -24,24 +24,26 @@ import {
   HashRouter as Router,
   Route
 } from 'react-router-dom';
+import { injectIntl } from 'react-intl';
+import { updateIntl } from 'react-intl-redux';
 
 const mapStateToPropsSessionList = state => {
   return {
-    sessions: state.sessions
+    sessions: state.mtc.sessions
   };
 };
 
 const mapStateToPropsCompletedSessionList = state => {
   return {
-    sessions: state.completedSessions
+    sessions: state.mtc.completedSessions
   };
 };
 
 const mapStateToPropsHeader = state => {
   return {
-    showMainMenu: state.showMainMenu,
-    showUserMenu: state.showUserMenu,
-    userMenuTarget: state.userMenuTarget
+    showMainMenu: state.mtc.showMainMenu,
+    showUserMenu: state.mtc.showUserMenu,
+    userMenuTarget: state.mtc.userMenuTarget
   };
 };
 
@@ -56,14 +58,17 @@ const mapDispatchToPropsHeader = dispatch => {
     },
     onCloseUserMenu: () => {
       dispatch({ type: 'CLOSE_USER_MENU' });
+    },
+    onLanguageChange: (locale, messages) => {
+      dispatch(updateIntl({ locale, messages }));
     }
   };
 };
 
-const ConnectedHeader = withRouter(connect(
+const ConnectedHeader = injectIntl(withRouter(connect(
   mapStateToPropsHeader,
   mapDispatchToPropsHeader
-)(Header));
+)(Header)));
 
 const ConnectedSessionList = connect(
   mapStateToPropsSessionList
