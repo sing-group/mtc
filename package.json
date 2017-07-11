@@ -1,0 +1,53 @@
+{
+  "name": "@sing-group/mtc",
+  "version": "0.1.0-alpha1",
+  "description": "MultiTasking Cubes - A tool for cognitive stimulation",
+  "author": [
+    {
+      "name": "Miguel Reboiro-Jato",
+      "email": "mrjato@uvigo.es"
+    }
+  ],
+  "license": "GPL-3.0",
+  "main": "index.js",
+  "repository": "https://github.com/sing-group/mtc.git",
+  "publishConfig": {
+    "registry": "https://maven.sing-group.org/repository/npm-snapshots/"
+  },
+  "scripts": {
+    "start": "webpack-dev-server --config webpack-dev-server.config.js --progress --colors --open",
+    "build": "webpack --config webpack-production.config.js --progress --colors"
+  },
+  "devDependencies": {
+    "babel-core": "^6.18.2",
+    "babel-loader": "^7.0.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-2": "^6.18.0",
+    "html-webpack-plugin": "^2.24.1",
+    "transfer-webpack-plugin": "^0.1.4",
+    "webpack": "^2.4.1",
+    "webpack-dev-server": "^2.4.2"
+  },
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "css-loader": "^0.28.4",
+    "file-loader": "^0.11.2",
+    "material-ui": "^0.18.5",
+    "mdbootstrap": "^4.3.2",
+    "prop-types": "^15.5.10",
+    "react": "^15.4.2",
+    "react-bootstrap": "^0.31.0",
+    "react-dom": "^15.4.2",
+    "react-material-icons": "^1.0.2",
+    "react-redux": "^5.0.5",
+    "react-responsive": "^1.3.0",
+    "react-router": "^4.1.1",
+    "react-router-dom": "^4.1.1",
+    "react-tap-event-plugin": "^2.0.1",
+    "redux": "^3.7.1",
+    "style-loader": "^0.18.2",
+    "typeface-roboto": "^0.0.29",
+    "url-loader": "^0.5.9"
+  }
+}
