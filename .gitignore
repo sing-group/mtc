@@ -1,11 +1,17 @@
 # Node
 node_modules
-build
 .npmrc
 npm-debug.log
+src
 
 # IntelliJ
 .idea
+
+# Visual Studio Code
+.vscode
+
+# Build
+dist
 
 # Generic
 bak

@@ -1,19 +1,22 @@
-/*
- MultiTasking Cubes
- Copyright (C) 2017 - Miguel Reboiro Jato
-
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+/**
+ * MultiTasking Cubes
+ * Copyright (C) 2017 - Miguel Reboiro-Jato, Adolfo Piñón Blanco,
+ * Hugo López-Fernández, Rosalía Laza Fidalgo, Reyes Pavón Rial,
+ * Francisco Otero Lamas, Adrián Varela Pomar, Carlos Spuch Calvar,
+ * and Tania Rivera Baltanás
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
@@ -29,35 +32,39 @@ import { FormattedMessage } from 'react-intl';
 import es_ES from '../i18n/es_ES.js';
 import gl_ES from '../i18n/gl_ES.js';
 import en_US from '../i18n/en_US.js';
+import PropTypes from "prop-types";
 
 export default class Header extends React.Component {
-  static defaultProps = {
-    showMainMenu: false,
-    showUserMenu: false,
-    onCloseUserMenu: () => {},
-    onMainMenuToggle: () => {},
-    onOpenUserMenu: e => {},
-    onLanguageChange: (locale, messages) => {}
-  };
+  static get defaultProps() {
+    return {
+      showMainMenu: false,
+      onMainMenuToggle: () => {},
+      onLanguageChange: (locale, messages) => {}
+    };
+  }
+
+  static get propTypes() {
+    return {
+      showMainMenu: PropTypes.bool,
+      onMainMenuToggle: PropTypes.func,
+      onLanguageChange: PropTypes.func,
+      history: PropTypes.object
+    };
+  }
 
   render() {
     const {
       history,
-      intl,
+      showMainMenu,
       onMainMenuToggle,
-      onOpenUserMenu,
-      onCloseUserMenu,
       onLanguageChange
     } = this.props;
+
     const pushAndToggle = route => {
-      return e => {
+      return () => {
         history.push(route);
         onMainMenuToggle();
       }
-    };
-    
-    const iconStyle = {
-      color: 'white !important'
     };
 
     const languageMenu = (
@@ -90,15 +97,17 @@ export default class Header extends React.Component {
       <div>
         <AppBar title="MultiTasking Cubes"
                 iconElementRight={languageMenu}
+                onLeftIconButtonClick={e => onMainMenuToggle()}
                 onLeftIconButtonTouchTap={e => onMainMenuToggle()}
         />
-        <Drawer open={this.props.showMainMenu}
+        <Drawer open={showMainMenu}
                 docked={false}
                 onRequestChange={e => onMainMenuToggle()}
         >
           <AppBar title="MTC"
                   showMenuIconButton={false}
                   iconElementRight={<IconButton><NavigationClose/></IconButton>}
+                  onRightIconButtonClick={e => onMainMenuToggle()}
                   onRightIconButtonTouchTap={e => onMainMenuToggle()}
           />
           <MenuItem onTouchTap={ pushAndToggle('/') }>

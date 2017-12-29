@@ -1,26 +1,31 @@
 /*
- MultiTasking Cubes
- Copyright (C) 2017 - Miguel Reboiro Jato
-
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * MultiTasking Cubes
+ * Copyright (C) 2017 - Miguel Reboiro-Jato, Adolfo Piñón Blanco,
+ * Hugo López-Fernández, Rosalía Laza Fidalgo, Reyes Pavón Rial,
+ * Francisco Otero Lamas, Adrián Varela Pomar, Carlos Spuch Calvar,
+ * and Tania Rivera Baltanás
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from "react";
-import Grid from 'react-bootstrap/lib/Grid';
-import Row from 'react-bootstrap/lib/Row';
-import Col from 'react-bootstrap/lib/Col';
-import SessionCard from './SessionCard.jsx';
-import Paper from 'material-ui/Paper';
+import Grid from "react-bootstrap/lib/Grid";
+import Row from "react-bootstrap/lib/Row";
+import Col from "react-bootstrap/lib/Col";
+import SessionCard from "./SessionCard.jsx";
+import Paper from "material-ui/Paper";
+import PropTypes from "prop-types";
+import Session from "../domain/Session.class";
 
 
 const style = {
@@ -31,34 +36,46 @@ const style = {
   paper: {
     margin: 10,
     minWidth: 100,
-    borderRadius: '10px'
+    borderRadius: "10px"
   }
 };
 
 export default class SessionList extends React.Component {
-  static defaultProps = {
-    cardMd: 8,
-    cardLg: 6,
-    cardMdOffset: 2,
-    cardLgOffset: 3,
-    animated: true,
-    sessions: []
+  static get defaultProps() {
+    return {
+      cardMd: 8,
+      cardLg: 6,
+      cardMdOffset: 2,
+      cardLgOffset: 3,
+      animated: true,
+      sessions: []
+    };
+  }
+
+  static get propTypes() {
+    return {
+      sessions: PropTypes.arrayOf(PropTypes.instanceOf(Session)).isRequired,
+      animated: PropTypes.bool,
+      cardMd: PropTypes.number,
+      cardLg: PropTypes.number,
+      cardMdOffset: PropTypes.number,
+      cardLgOffset: PropTypes.number
+    };
   }
 
   _paperStyle(index) {
     if (this.props.animated) {
-      return {
-        ...style.paper,
-        animationDuration: '1s',
-        animationDelay: (0.25 * index) + 's'
-      };
+      return Object.assign({}, style.paper, {
+        animationDuration: "1s",
+        animationDelay: (0.25 * index) + "s"
+      });
     } else {
       return style.paper;
     }
   }
 
   render() {
-    const paperClass = this.props.animated ? 'animated fadeIn' : '';
+    const paperClass = this.props.animated ? "animated fadeIn" : "";
 
     return (
       <Grid fluid>

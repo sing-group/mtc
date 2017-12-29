@@ -1,23 +1,26 @@
 /*
- MultiTasking Cubes
- Copyright (C) 2017 - Miguel Reboiro Jato
-
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * MultiTasking Cubes
+ * Copyright (C) 2017 - Miguel Reboiro-Jato, Adolfo Piñón Blanco,
+ * Hugo López-Fernández, Rosalía Laza Fidalgo, Reyes Pavón Rial,
+ * Francisco Otero Lamas, Adrián Varela Pomar, Carlos Spuch Calvar,
+ * and Tania Rivera Baltanás
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from "react";
-import { createStore, combineReducers } from "redux";
-import { Provider, intlReducer } from "react-intl-redux";
+import {combineReducers, createStore} from "redux";
+import {intlReducer, Provider} from "react-intl-redux";
 import ReactDOM from "react-dom";
 import App from "../components/App.jsx";
 import injectTapEventPlugin from "react-tap-event-plugin";
@@ -29,6 +32,23 @@ import en from 'react-intl/locale-data/en';
 import gl from 'react-intl/locale-data/gl';
 import es from 'react-intl/locale-data/es';
 import es_ES from '../i18n/es_ES.js';
+import Session from '@sing-group/mtc-games/src/session/Session';
+import SessionMetadata from '@sing-group/mtc-games/src/session/SessionMetadata';
+import RecognitionGame from '@sing-group/mtc-games/src/game/recognition/RecognitionGame';
+import VerbalFluencyGame from '@sing-group/mtc-games/src/game/verbal_fluency/VerbalFluencyGame';
+
+import 'pixi';
+import 'p2';
+
+import './main.css';
+
+import WebFontLoader from 'webfontloader';
+
+WebFontLoader.load({
+  google: {
+    families: ['Roboto:400,300,500:latin']
+  }
+});
 
 addLocaleData([...en, ...gl, ...es]);
 
@@ -37,6 +57,24 @@ addLocaleData([...en, ...gl, ...es]);
 injectTapEventPlugin();
 
 const mtc = Reducer.chain(new UserMenuReducer(), new MainMenuReducer());
+
+const session1 = new Session(new SessionMetadata(
+  'Session 1',
+  'Session 1 description',
+  [
+    //new RecognitionGame(),
+    //new VerbalFluencyGame()
+  ]
+));
+
+const session2 = new Session(new SessionMetadata(
+  'Session 2',
+  'Session 2 description',
+  [
+    //new VerbalFluencyGame(),
+    //new VerbalFluencyGame()
+  ]
+));
 
 const store = createStore(
   combineReducers({
@@ -48,19 +86,11 @@ const store = createStore(
       showMainMenu: false,
       showUserMenu: false,
       sessions: [
-        {
-          id: 1,
-          title: 'Session 1',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc auctor nisl est, nec feugiat mi vehicula non.'
-        },
-        {
-          id: 2,
-          title: 'Session 2',
-          description: 'Nam tempor ex vitae elit euismod dapibus. Nam ornare nulla nec lectus vestibulum, dictum aliquet turpis commodo.'
-        }
+        session1,
+        session2
       ],
       completedSessions: [
-        {
+        /*{
           id: 3,
           title: 'Session 3',
           description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc auctor nisl est, nec feugiat mi vehicula non.'
@@ -74,7 +104,7 @@ const store = createStore(
           id: 5,
           title: 'Session 5',
           description: 'Nam tempor ex vitae elit euismod dapibus. Nam ornare nulla nec lectus vestibulum, dictum aliquet turpis commodo.'
-        }
+        }*/
       ]
     },
     intl: {
