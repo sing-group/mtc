@@ -23,7 +23,11 @@ const es_ES = {
   settings: 'Configuración',
   start: 'Empezar',
   openSessions: 'Sesiones pendientes',
-  completedSessions: 'Sesiones completas'
+  completedSessions: 'Sesiones completas',
+  'session.1.name': "Sesión 1",
+  'session.1.description': "Descripción 1",
+  'session.2.name': "Sesión 2",
+  'session.2.description': "Descripción 2"
 };
 
 export default es_ES;

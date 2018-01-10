@@ -34,8 +34,11 @@ import es from 'react-intl/locale-data/es';
 import es_ES from '../i18n/es_ES.js';
 import Session from '@sing-group/mtc-games/src/session/Session';
 import SessionMetadata from '@sing-group/mtc-games/src/session/SessionMetadata';
-import RecognitionGame from '@sing-group/mtc-games/src/game/recognition/RecognitionGame';
-import VerbalFluencyGame from '@sing-group/mtc-games/src/game/verbal_fluency/VerbalFluencyGame';
+import GameConfig from '@sing-group/mtc-games/src/game/GameConfig';
+import VerbalFluencyGameMetadata from '@sing-group/mtc-games/src/game/verbal_fluency/VerbalFluencyGameMetadata';
+import RecognitionGameMetadata from '@sing-group/mtc-games/src/game/recognition/RecognitionGameMetadata';
+import RecognitionGameCallback from '@sing-group/mtc-games/src/game/recognition/RecognitionGameCallback';
+import VerbalFluencyGameCallback from '@sing-group/mtc-games/src/game/verbal_fluency/VerbalFluencyGameCallback';
 
 import 'pixi';
 import 'p2';
@@ -59,20 +62,20 @@ injectTapEventPlugin();
 const mtc = Reducer.chain(new UserMenuReducer(), new MainMenuReducer());
 
 const session1 = new Session(new SessionMetadata(
-  'Session 1',
-  'Session 1 description',
+  'session.1.name',
+  'session.1.description',
   [
-    //new RecognitionGame(),
-    //new VerbalFluencyGame()
+    GameConfig.forMetadata(new RecognitionGameMetadata(), new RecognitionGameCallback()),
+    GameConfig.forMetadata(new VerbalFluencyGameMetadata(), new VerbalFluencyGameCallback())
   ]
 ));
 
 const session2 = new Session(new SessionMetadata(
-  'Session 2',
-  'Session 2 description',
+  'session.2.name',
+  'session.2.description',
   [
-    //new VerbalFluencyGame(),
-    //new VerbalFluencyGame()
+    GameConfig.forMetadata(new VerbalFluencyGameMetadata(), new VerbalFluencyGameCallback()),
+    GameConfig.forMetadata(new VerbalFluencyGameMetadata(), new VerbalFluencyGameCallback())
   ]
 ));
 

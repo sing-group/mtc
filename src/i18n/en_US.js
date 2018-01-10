@@ -23,7 +23,11 @@ const en_US = {
   settings: 'Settings',
   start: 'Start',
   openSessions: 'Open sessions',
-  completedSessions: 'Completed sessions'
+  completedSessions: 'Completed sessions',
+  'session.1.name': "Session 1",
+  'session.1.description': "Description 1",
+  'session.2.name': "Session 2",
+  'session.2.description': "Description 2"
 };
 
 export default en_US;

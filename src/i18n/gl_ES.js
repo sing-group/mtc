@@ -23,7 +23,11 @@ const gl_ES = {
   settings: 'Configuración',
   start: 'Comezar',
   openSessions: 'Sesións pendentes',
-  completedSessions: 'Sesións completas'
+  completedSessions: 'Sesións completas',
+  'session.1.name': "Sesión 1",
+  'session.1.description': "Descrición 1",
+  'session.2.name': "Sesión 2",
+  'session.2.description': "Descrición 2"
 };
 
 export default gl_ES;
