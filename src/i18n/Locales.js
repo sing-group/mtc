@@ -22,6 +22,9 @@
 import es_ES from './es_ES';
 import gl_ES from './gl_ES';
 import en_US from './en_US';
+import es_ES_Games from '@sing-group/mtc-games/src/i18n/es_ES';
+import gl_ES_Games from '@sing-group/mtc-games/src/i18n/gl_ES';
+import en_US_Games from '@sing-group/mtc-games/src/i18n/en_US';
 
 const LOCALES = Symbol();
 
@@ -29,12 +32,10 @@ export default class Locales {
   static get LOCALES() {
     if (!Locales[LOCALES]) {
       Locales[LOCALES] = {
-        es: Object.assign({}, es_ES),
-        gl: Object.assign({}, gl_ES),
-        en: Object.assign({}, en_US)
+        es: Object.assign({}, es_ES, es_ES_Games),
+        gl: Object.assign({}, gl_ES, gl_ES_Games),
+        en: Object.assign({}, en_US, en_US_Games)
       };
-
-      Object.freeze(Locales[LOCALES]);
     }
 
     return Locales[LOCALES];
@@ -59,5 +60,20 @@ export default class Locales {
 
   static getByIndex(index) {
     return Locales.LOCALES[Locales.LOCALE_IDS[index]];
+  }
+
+  static addLocales(messages) {
+    Object.keys(messages).forEach(key => {
+      const parsedKey = Locales.parseId(key);
+      Locales[LOCALES][parsedKey] = Object.assign(Locales[LOCALES][parsedKey], messages[key]);
+    });
+  }
+
+  static parseId(id) {
+    if (id.includes('_')) {
+      return id.substring(0, id.indexOf('_'));
+    } else {
+      return id;
+    }
   }
 }

@@ -32,13 +32,6 @@ import en from 'react-intl/locale-data/en';
 import gl from 'react-intl/locale-data/gl';
 import es from 'react-intl/locale-data/es';
 import Locales from '../i18n/Locales';
-import Session from '@sing-group/mtc-games/src/session/Session';
-import SessionMetadata from '@sing-group/mtc-games/src/session/SessionMetadata';
-import GameConfig from '@sing-group/mtc-games/src/game/GameConfig';
-import VerbalFluencyGameMetadata from '@sing-group/mtc-games/src/game/verbal_fluency/VerbalFluencyGameMetadata';
-import RecognitionGameMetadata from '@sing-group/mtc-games/src/game/recognition/RecognitionGameMetadata';
-import RecognitionGameCallback from '@sing-group/mtc-games/src/game/recognition/RecognitionGameCallback';
-import VerbalFluencyGameCallback from '@sing-group/mtc-games/src/game/verbal_fluency/VerbalFluencyGameCallback';
 
 import 'pixi';
 import 'p2';
@@ -53,6 +46,9 @@ import {JsonRestBroker} from "../endpoint/JsonRestBroker";
 import { API_URL } from '../configuration/configuration';
 import LoginReducer from "../reducers/LoginReducer";
 import LoginReductions from "../reducers/LoginReducer";
+import GamesSessionsReducer from "../reducers/GamesSessionsReducer";
+import GamesSessionEndpoint from "../endpoint/GamesSessionEndpoint";
+import GamesSessionsController from "../controllers/GamesSessionsController";
 
 WebFontLoader.load({
   google: {
@@ -66,25 +62,12 @@ addLocaleData([...en, ...gl, ...es]);
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
 
-const mtc = Reducer.chain(new UserMenuReducer(), new MainMenuReducer(), new LoginReducer());
-
-const session1 = new Session(new SessionMetadata(
-  'session.1.name',
-  'session.1.description',
-  [
-    GameConfig.forMetadata(new RecognitionGameMetadata(), new RecognitionGameCallback()),
-    GameConfig.forMetadata(new VerbalFluencyGameMetadata(), new VerbalFluencyGameCallback())
-  ]
-));
-
-const session2 = new Session(new SessionMetadata(
-  'session.2.name',
-  'session.2.description',
-  [
-    GameConfig.forMetadata(new VerbalFluencyGameMetadata(), new VerbalFluencyGameCallback()),
-    GameConfig.forMetadata(new VerbalFluencyGameMetadata(), new VerbalFluencyGameCallback())
-  ]
-));
+const mtc = Reducer.chain(
+  new UserMenuReducer(),
+  new MainMenuReducer(),
+  new LoginReducer(),
+  new GamesSessionsReducer()
+);
 
 const store = createStore(
   combineReducers({
@@ -97,27 +80,14 @@ const store = createStore(
       menu: {
         showMainMenu: false
       },
-      sessions: [
-        session1,
-        session2
-      ],
-      completedSessions: [
-        /*{
-          id: 3,
-          title: 'Session 3',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc auctor nisl est, nec feugiat mi vehicula non.'
-        },
-        {
-          id: 4,
-          title: 'Session 4',
-          description: 'Nam tempor ex vitae elit euismod dapibus. Nam ornare nulla nec lectus vestibulum, dictum aliquet turpis commodo.'
-        },
-        {
-          id: 5,
-          title: 'Session 5',
-          description: 'Nam tempor ex vitae elit euismod dapibus. Nam ornare nulla nec lectus vestibulum, dictum aliquet turpis commodo.'
-        }*/
-      ]
+      assignedSessions: {
+        requested: false,
+        sessions: []
+      },
+      completedSessions: {
+        requested: false,
+        sessions: []
+      }
     },
     intl: {
       defaultLocale: Locales.DEFAULT_LOCALE_ID,
@@ -127,10 +97,17 @@ const store = createStore(
   }
 );
 
-const userEndpoint = new UserEndpoint(new EndpointPathBuilder(), new JsonRestBroker(API_URL), store);
+const restBroker = new JsonRestBroker(API_URL, () => store.getState().mtc.user.token);
+const endpointPathBuilder = new EndpointPathBuilder();
+
+const userEndpoint = new UserEndpoint(endpointPathBuilder, restBroker, store);
+const gamesSessionEndpoint = new GamesSessionEndpoint(endpointPathBuilder, restBroker, store);
+
 const loginController = new LoginController(userEndpoint);
+const gamesSessionController = new GamesSessionsController(gamesSessionEndpoint);
 
 loginController.subscribeTo(store);
+gamesSessionController.subscribeTo(store);
 
 ReactDOM.render(
   <Provider store={store}>

@@ -22,7 +22,6 @@ const gl_ES = {
   exit: 'Saír',
   settings: 'Configuración',
   start: 'Comezar',
-  openSessions: 'Sesións pendentes',
   'locale.es': 'Castelán',
   'locale.gl': 'Galego',
   'locale.en': 'Inglés',
@@ -32,11 +31,10 @@ const gl_ES = {
   'login.doLogin': 'Entrar',
   'login.changeLanguage': 'Cambiar Linguaxe',
   'login.invalidCredentials': 'Usuario ou contrasinal non válidos',
-  completedSessions: 'Sesións completas',
-  'session.1.name': "Sesión 1",
-  'session.1.description': "Descrición 1",
-  'session.2.name': "Sesión 2",
-  'session.2.description': "Descrición 2"
+  'sessions.opened': 'Sesións pendentes',
+  'sessions.completed': 'Sesiones completas',
+  'sessions.title': "Sesións de Xogos",
+  'sessions.empty': "Non se atopou ningunha sesión de xogos."
 };
 
 export default gl_ES;

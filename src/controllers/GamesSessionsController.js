@@ -20,41 +20,26 @@
  */
  
 import check from 'check-types';
-import {create} from 'apisauce';
+import StoreListener from "./StoreListener";
+import GamesSessionEndpoint from "../endpoint/GamesSessionEndpoint";
 
-export class JsonRestBroker {
-  constructor(apiUrl, tokenProvider) {
-    check.assert.nonEmptyString(apiUrl, 'apiUrl should be a non empty string');
-    check.assert.function(tokenProvider, 'tokenProvider should be a function');
+export default class GamesSessionsController {
+  constructor(endpoint) {
+    check.assert.instance(endpoint, GamesSessionEndpoint, 'endpoint should be an instance of GamesSessionEndpoint');
 
-    this._apiUrl = apiUrl;
-    this._tokenProvider = tokenProvider;
+    this._endpoint = endpoint;
   }
 
-  _createApi() {
-    const headers = {
-      'Accept': 'application/json',
-      'Access-Control-Allow-Origin': '*'
-    };
+  subscribeTo(store) {
+    const storeListener = new StoreListener(store);
 
-    const token = this._tokenProvider();
-
-    if (check.nonEmptyString(token)) {
-      headers.Authorization = 'Basic ' + token;
-    }
-
-    return create({
-      baseURL: this._apiUrl,
-      headers: headers
-    });
-  }
-
-  get(...params) {
-    return this._createApi().get(...params);
-  }
-
-
-  post(...params) {
-    return this._createApi().post(...params);
+    storeListener.listen(
+      state => state.mtc.assignedSessions.requested,
+      (assignedSessionsRequested, _, state) => {
+        if (assignedSessionsRequested) {
+          this._endpoint.getAssignedSessions(state.mtc.user.username);
+        }
+      }
+    );
   }
 }

@@ -35,17 +35,27 @@ import MenusActions from "../actions/MenusActions";
 import Login from "./Login.jsx";
 import LoginActions from "../actions/LoginActions";
 import PropTypes from "prop-types";
+import GamesSessionActions from "../actions/GamesSessionActions";
+import SessionPanel from "./SessionPanel.jsx";
 
 const mapStateToPropsLayout = state => ({
   isLoggedIn: state.mtc.user.isLoggedIn
 });
 
 const mapStateToPropsSessionList = state => ({
-  sessions: state.mtc.sessions
+  sessions: state.mtc.assignedSessions.sessions,
+  sessionsRequested: state.mtc.assignedSessions.requested
+});
+
+const mapDispatchToPropsSessionList = dispatch => ({
+  onComponentWillMount: () => {
+    dispatch(GamesSessionActions.assignedGamesSessionsRequested());
+  }
 });
 
 const mapStateToPropsCompletedSessionList = state => ({
-  sessions: state.mtc.completedSessions
+  sessions: state.mtc.completedSessions.sessions,
+  sessionsRequested: state.mtc.completedSessions.requested
 });
 
 const mapStateToPropsHeader = state => ({
@@ -89,12 +99,13 @@ const ConnectedHeader = injectIntl(withRouter(connect(
 )(Header)));
 
 const ConnectedSessionList = injectIntl(connect(
-  mapStateToPropsSessionList
-)(SessionList));
+  mapStateToPropsSessionList,
+  mapDispatchToPropsSessionList
+)(SessionPanel));
 
 const ConnectedCompletedSessionList = injectIntl(connect(
   mapStateToPropsCompletedSessionList
-)(SessionList));
+)(SessionPanel));
 
 class Layout extends React.Component {
   static get propTypes() {

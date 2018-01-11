@@ -22,8 +22,6 @@ const en_US = {
   exit: 'Exit',
   settings: 'Settings',
   start: 'Start',
-  openSessions: 'Open sessions',
-  completedSessions: 'Completed sessions',
   'locale.es': 'Spanish',
   'locale.gl': 'Galician',
   'locale.en': 'English',
@@ -31,11 +29,12 @@ const en_US = {
   'login.username': 'Username',
   'login.password': 'Password',
   'login.doLogin': 'Login',
+  'login.changeLanguage': 'Change Language',
   'login.invalidCredentials': 'Invalid user or password',
-  'session.1.name': "Session 1",
-  'session.1.description': "Description 1",
-  'session.2.name': "Session 2",
-  'session.2.description': "Description 2"
+  'sessions.opened': 'Open sessions',
+  'sessions.completed': 'Completed sessions',
+  'sessions.title': "Game Sessions",
+  'sessions.empty': "No game sessions found."
 };
 
 export default en_US;

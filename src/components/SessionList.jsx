@@ -22,13 +22,15 @@ import React from "react";
 import Grid from "react-bootstrap/lib/Grid";
 import Row from "react-bootstrap/lib/Row";
 import Col from "react-bootstrap/lib/Col";
-import SessionCard from "./SessionCard.jsx";
+import SessionCard, {style as sessionCardStyle} from "./SessionCard.jsx";
 import Paper from "material-ui/Paper";
 import PropTypes from "prop-types";
-import Session from '@sing-group/mtc-games/src/session/Session';
+import AssignedGamesSession from '../domain/AssignedGamesSession';
+import {Card, CardText, CardTitle} from "material-ui/Card";
+import {FormattedMessage} from 'react-intl';
 
 
-const style = {
+export const style = {
   column: {
     paddingRight: 0,
     paddingLeft: 0
@@ -54,7 +56,7 @@ export default class SessionList extends React.Component {
 
   static get propTypes() {
     return {
-      sessions: PropTypes.arrayOf(PropTypes.instanceOf(Session)).isRequired,
+      sessions: PropTypes.arrayOf(PropTypes.instanceOf(AssignedGamesSession)).isRequired,
       intl: PropTypes.shape({
         formatMessage: PropTypes.func.isRequired
       }),
@@ -80,23 +82,47 @@ export default class SessionList extends React.Component {
   render() {
     const paperClass = this.props.animated ? "animated fadeIn" : "";
 
-    return (
-      <Grid fluid>
-        {this.props.sessions.map((session, index) => (
-          <Row key={index}>
+    if (this.props.sessions.length === 0) {
+      return (
+        <Grid fluid>
+          <Row>
             <Col style={style.column}
                  md={this.props.cardMd}
                  lg={this.props.cardLg}
                  mdOffset={this.props.cardMdOffset}
                  lgOffset={this.props.cardLgOffset}
             >
-              <Paper style={this._paperStyle(index)} zDepth={2} className={paperClass}>
-                <SessionCard session={session} intl={this.props.intl}/>
+              <Paper style={this._paperStyle(0)} zDepth={2} className={paperClass}>
+                <Card style={sessionCardStyle.card}>
+                  <CardTitle title={<FormattedMessage id="sessions.title"/>} style={sessionCardStyle.title}/>
+                  <CardText>
+                    <FormattedMessage id="sessions.empty"/>
+                  </CardText>
+                </Card>
               </Paper>
             </Col>
           </Row>
-        ))}
-      </Grid>
-    );
+        </Grid>
+      );
+    } else {
+      return (
+        <Grid fluid>
+          {this.props.sessions.map((session, index) => (
+            <Row key={index}>
+              <Col style={style.column}
+                   md={this.props.cardMd}
+                   lg={this.props.cardLg}
+                   mdOffset={this.props.cardMdOffset}
+                   lgOffset={this.props.cardLgOffset}
+              >
+                <Paper style={this._paperStyle(index)} zDepth={2} className={paperClass}>
+                  <SessionCard session={session} intl={this.props.intl}/>
+                </Paper>
+              </Col>
+            </Row>
+          ))}
+        </Grid>
+      );
+    }
   }
 }

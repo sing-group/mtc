@@ -18,43 +18,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 import check from 'check-types';
-import {create} from 'apisauce';
+import SessionMetadata from '@sing-group/mtc-games/src/session/SessionMetadata';
 
-export class JsonRestBroker {
-  constructor(apiUrl, tokenProvider) {
-    check.assert.nonEmptyString(apiUrl, 'apiUrl should be a non empty string');
-    check.assert.function(tokenProvider, 'tokenProvider should be a function');
+export default class AssignedGamesSession {
+  constructor(
+    startDate, endDate,
+    sessionMetadata
+  ) {
+    check.assert.instance(sessionMetadata, SessionMetadata, 'sessionMetadata should be an instance of SessionMetadata');
 
-    this._apiUrl = apiUrl;
-    this._tokenProvider = tokenProvider;
+    this._startDate = startDate;
+    this._endDate = endDate;
+    this._sessionMetadata = sessionMetadata;
   }
 
-  _createApi() {
-    const headers = {
-      'Accept': 'application/json',
-      'Access-Control-Allow-Origin': '*'
-    };
-
-    const token = this._tokenProvider();
-
-    if (check.nonEmptyString(token)) {
-      headers.Authorization = 'Basic ' + token;
-    }
-
-    return create({
-      baseURL: this._apiUrl,
-      headers: headers
-    });
+  get startDate() {
+    return this._startDate;
   }
 
-  get(...params) {
-    return this._createApi().get(...params);
+  get endDate() {
+    return this._endDate;
   }
 
-
-  post(...params) {
-    return this._createApi().post(...params);
+  get sessionMetadata() {
+    return this._sessionMetadata;
   }
 }

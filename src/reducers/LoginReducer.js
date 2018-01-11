@@ -55,7 +55,7 @@ class LoginReductions {
           isLoggedIn: true,
           username: state.user.username,
           password: null,
-          token: btoa(state.username + ':' + state.password),
+          token: btoa(state.user.username + ':' + state.user.password),
           loginRequested: false,
           loginError: null
         }

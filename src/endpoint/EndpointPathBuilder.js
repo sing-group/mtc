@@ -23,4 +23,8 @@ export default class EndpointPathBuilder {
   login(username, password) {
     return `/user/role?login=${username}&password=${password}`;
   }
+
+  assignedSessions(username) {
+    return `/patient/${username}/games-session/assigned`;
+  }
 }

@@ -23,10 +23,16 @@ import PropTypes from 'prop-types';
 import {Card, CardActions, CardText, CardTitle} from "material-ui/Card";
 import FlatButton from "material-ui/FlatButton";
 import LinearProgress from "material-ui/LinearProgress";
-import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
-import Session from '@sing-group/mtc-games/src/session/Session';
+import {FormattedMessage, FormattedDate} from 'react-intl';
+import AssignedGamesSession from '../domain/AssignedGamesSession';
+import {
+  Step,
+  Stepper,
+  StepLabel,
+  StepContent,
+} from 'material-ui/Stepper';
 
-const style = {
+export const style = {
   actions: {
     textAlign: 'center'
   },
@@ -40,34 +46,47 @@ const style = {
   }
 };
 
-class SessionCard extends Component {
+export default class SessionCard extends Component {
   static get propTypes() {
     return {
-      session: PropTypes.instanceOf(Session).isRequired,
-      intl: PropTypes.shape({
-        formatMessage: PropTypes.func.isRequired
-      })
+      session: PropTypes.instanceOf(AssignedGamesSession).isRequired
     };
   }
 
   render() {
-    const {intl} = this.props;
+    const {session} = this.props;
 
-    const messages = defineMessages({
-      name: {
-        id: this.props.session.metadata.nameId,
-        defaultMessage: "Session"
-      },
-      description: {
-        id: this.props.session.metadata.descriptionId,
-        defaultMessage: "No description"
-      }
+    const games = session.sessionMetadata.gameConfigs;
+
+    let index = 0;
+    const steps = games.map(game => {
+      return <Step key={game.metadata.nameId + index++}>
+        <StepLabel>
+          <FormattedMessage id={game.metadata.nameId}/>
+        </StepLabel>
+        <StepContent>
+          <FormattedMessage id={game.metadata.descriptionId}/>
+        </StepContent>
+      </Step>;
     });
 
     return (
       <Card style={style.card} containerStyle={style.card}>
-        <CardTitle title={intl.formatMessage(messages.name)} style={style.title}/>
-        <CardText>{intl.formatMessage(messages.description)}</CardText>
+        <CardTitle
+          title={<FormattedMessage id={session.sessionMetadata.nameId} />}
+          subtitle={<span>
+            <FormattedDate value={session.startDate}/> - <FormattedDate value={session.endDate}/>
+          </span>}
+          style={style.title}
+        />
+        <CardText>
+          <FormattedMessage id={session.sessionMetadata.descriptionId} />
+          <div>
+            <Stepper activeStep={0} orientation="vertical">
+              {steps}
+            </Stepper>
+          </div>
+        </CardText>
         <LinearProgress mode="determinate" value={1} max={3}/>
         <CardActions style={style.actions}>
           <FlatButton label={<FormattedMessage id="start"/>}/>
@@ -75,6 +94,4 @@ class SessionCard extends Component {
       </Card>
     );
   }
-};
-
-export default injectIntl(SessionCard);
+}

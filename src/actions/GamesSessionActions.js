@@ -18,43 +18,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
- 
-import check from 'check-types';
-import {create} from 'apisauce';
 
-export class JsonRestBroker {
-  constructor(apiUrl, tokenProvider) {
-    check.assert.nonEmptyString(apiUrl, 'apiUrl should be a non empty string');
-    check.assert.function(tokenProvider, 'tokenProvider should be a function');
+import check from "check-types";
 
-    this._apiUrl = apiUrl;
-    this._tokenProvider = tokenProvider;
-  }
-
-  _createApi() {
-    const headers = {
-      'Accept': 'application/json',
-      'Access-Control-Allow-Origin': '*'
+export default class GamesSessionActions {
+  static assignedGamesSessionsRequested() {
+    return {
+      type: 'ASSIGNED_GAMES_SESSIONS_REQUESTED'
     };
-
-    const token = this._tokenProvider();
-
-    if (check.nonEmptyString(token)) {
-      headers.Authorization = 'Basic ' + token;
-    }
-
-    return create({
-      baseURL: this._apiUrl,
-      headers: headers
-    });
   }
 
-  get(...params) {
-    return this._createApi().get(...params);
-  }
-
-
-  post(...params) {
-    return this._createApi().post(...params);
+  static assignedGamesSessionsUpdated(sessions, messages) {
+    return {
+      type: 'ASSIGNED_GAMES_SESSIONS_UPDATED',
+      sessions: sessions,
+      messages: messages
+    };
   }
 }

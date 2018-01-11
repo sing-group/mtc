@@ -18,43 +18,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
- 
-import check from 'check-types';
-import {create} from 'apisauce';
 
-export class JsonRestBroker {
-  constructor(apiUrl, tokenProvider) {
-    check.assert.nonEmptyString(apiUrl, 'apiUrl should be a non empty string');
-    check.assert.function(tokenProvider, 'tokenProvider should be a function');
+import Reducer from "./Reducer";
+import Locales from "../i18n/Locales";
 
-    this._apiUrl = apiUrl;
-    this._tokenProvider = tokenProvider;
-  }
-
-  _createApi() {
-    const headers = {
-      'Accept': 'application/json',
-      'Access-Control-Allow-Origin': '*'
-    };
-
-    const token = this._tokenProvider();
-
-    if (check.nonEmptyString(token)) {
-      headers.Authorization = 'Basic ' + token;
-    }
-
-    return create({
-      baseURL: this._apiUrl,
-      headers: headers
+class GamesSessionsReductions {
+  assignedGamesSessionsRequested(state) {
+    return Object.assign({}, state, {
+      assignedSessions: {
+        requested: true,
+        sessions: []
+      }
     });
   }
 
-  get(...params) {
-    return this._createApi().get(...params);
-  }
+  assignedGamesSessionsUpdated(state, action) {
+    Locales.addLocales(action.messages);
 
-
-  post(...params) {
-    return this._createApi().post(...params);
+    return Object.assign({}, state, {
+      assignedSessions: {
+        requested: false,
+        sessions: action.sessions
+      }
+    });
   }
 }
+
+const GamesSessionsReducer = Reducer.of(GamesSessionsReductions);
+
+export default GamesSessionsReducer;
