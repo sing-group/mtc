@@ -1,9 +1,9 @@
 /*
- * MultiTasking Cubes
- * Copyright (C) 2017 - Miguel Reboiro-Jato, Adolfo Piñón Blanco,
- * Hugo López-Fernández, Rosalía Laza Fidalgo, Reyes Pavón Rial,
- * Francisco Otero Lamas, Adrián Varela Pomar, Carlos Spuch Calvar,
- * and Tania Rivera Baltanás
+ * MultiTasking Cubes Administration
+ * Copyright (C) 2017-2018 - Miguel Reboiro-Jato, Francisco Rojas Rodríguez,
+ * Adolfo Piñón Blanco, Hugo López-Fernández, Rosalía Laza Fidalgo,
+ * Reyes Pavón Rial, Francisco Otero Lamas, Adrián Varela Pomar,
+ * Carlos Spuch Calvar, and Tania Rivera Baltanás
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,23 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-html {
-  font-family: 'Roboto', sans-serif;
-}
-
-body {
-  font-size: 13px;
-  line-height: 20px;
-  margin: 0px;
-}
-
-.login-container {
-  position: relative;
-}
-
-.login {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+ 
+export default class MenusActions {
+  static toggleMainMenu() {
+    return {
+      type: 'TOGGLE_MAIN_MENU'
+    };
+  }
 }

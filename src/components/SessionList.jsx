@@ -25,7 +25,7 @@ import Col from "react-bootstrap/lib/Col";
 import SessionCard from "./SessionCard.jsx";
 import Paper from "material-ui/Paper";
 import PropTypes from "prop-types";
-import Session from "../domain/Session.class";
+import Session from '@sing-group/mtc-games/src/session/Session';
 
 
 const style = {
@@ -55,6 +55,9 @@ export default class SessionList extends React.Component {
   static get propTypes() {
     return {
       sessions: PropTypes.arrayOf(PropTypes.instanceOf(Session)).isRequired,
+      intl: PropTypes.shape({
+        formatMessage: PropTypes.func.isRequired
+      }),
       animated: PropTypes.bool,
       cardMd: PropTypes.number,
       cardLg: PropTypes.number,
@@ -88,7 +91,7 @@ export default class SessionList extends React.Component {
                  lgOffset={this.props.cardLgOffset}
             >
               <Paper style={this._paperStyle(index)} zDepth={2} className={paperClass}>
-                <SessionCard session={session}/>
+                <SessionCard session={session} intl={this.props.intl}/>
               </Paper>
             </Col>
           </Row>

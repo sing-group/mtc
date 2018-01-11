@@ -29,65 +29,78 @@ import Divider from 'material-ui/Divider';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import ActionLanguage from 'material-ui/svg-icons/action/language';
 import { FormattedMessage } from 'react-intl';
-import es_ES from '../i18n/es_ES.js';
-import gl_ES from '../i18n/gl_ES.js';
-import en_US from '../i18n/en_US.js';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
+import Locales from '../i18n/Locales';
+import LanguageMenu from './LanguageMenu.jsx';
 
 export default class Header extends React.Component {
-  static get defaultProps() {
-    return {
-      showMainMenu: false,
-      onMainMenuToggle: () => {},
-      onLanguageChange: (locale, messages) => {}
-    };
-  }
-
   static get propTypes() {
     return {
+      intl: PropTypes.shape({
+        formatMessage: PropTypes.func.isRequired
+      }),
       showMainMenu: PropTypes.bool,
       onMainMenuToggle: PropTypes.func,
       onLanguageChange: PropTypes.func,
-      history: PropTypes.object
+      onLogout: PropTypes.func,
+      history: PropTypes.object.isRequired
     };
+  }
+
+  static get defaultProps() {
+    return {
+      showMainMenu: false,
+      onLogout: () => {},
+      onMainMenuToggle: () => {},
+      onLanguageChange: () => {}
+    };
+  }
+
+  handleLogout() {
+    this.props.onLogout();
+  }
+
+  handleLanguageChange(localeId) {
+    this.props.onLanguageChange(localeId, Locales.getById(localeId));
+  }
+
+  handleRouteChange(route) {
+    const {history} = this.props;
+
+    if (history.location.pathname !== route) {
+      history.push(route);
+    }
+    this.handleMainMenuToggle();
+  }
+
+  handleMainMenuToggle() {
+    this.props.onMainMenuToggle();
   }
 
   render() {
     const {
-      history,
-      showMainMenu,
-      onMainMenuToggle,
-      onLanguageChange
+      intl,
+      showMainMenu
     } = this.props;
 
-    const pushAndToggle = route => {
-      return () => {
-        history.push(route);
-        onMainMenuToggle();
-      }
-    };
-
-    const languageMenu = (
+    const settingsMenu = (
       <div>
-        <IconMenu iconButtonElement={<IconButton><ActionLanguage color="white"/></IconButton>}
-                  anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
-                  targetOrigin={{horizontal: 'right', vertical: 'top'}}
-        >
-          <MenuItem primaryText="en" onTouchTap={e => onLanguageChange('en', en_US)}/>
-          <MenuItem primaryText="es" onTouchTap={e => onLanguageChange('es', es_ES)}/>
-          <MenuItem primaryText="gl" onTouchTap={e => onLanguageChange('gl', gl_ES)}/>
-        </IconMenu>
-
-        <IconMenu iconButtonElement={<IconButton><MoreVertIcon color="white"/></IconButton>}
+        <LanguageMenu iconButtonElement={<IconButton><ActionLanguage color='white'/></IconButton>}
+          intl={intl}
+          anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+          targetOrigin={{horizontal: 'right', vertical: 'top'}}
+          onLanguageChange={this.handleLanguageChange.bind(this)}
+        />
+        <IconMenu iconButtonElement={<IconButton><MoreVertIcon color='white'/></IconButton>}
                   anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                   targetOrigin={{horizontal: 'right', vertical: 'top'}}
         >
           <MenuItem>
-            <FormattedMessage id="settings"/>
+            <FormattedMessage id='settings'/>
           </MenuItem>
           <Divider/>
-          <MenuItem>
-            <FormattedMessage id="exit"/>
+          <MenuItem onClick={this.handleLogout.bind(this)}>
+            <FormattedMessage id='exit'/>
           </MenuItem>
         </IconMenu>
       </div>
@@ -95,26 +108,24 @@ export default class Header extends React.Component {
 
     return (
       <div>
-        <AppBar title="MultiTasking Cubes"
-                iconElementRight={languageMenu}
-                onLeftIconButtonClick={e => onMainMenuToggle()}
-                onLeftIconButtonTouchTap={e => onMainMenuToggle()}
+        <AppBar title='MultiTasking Cubes'
+                iconElementRight={settingsMenu}
+                onLeftIconButtonClick={this.handleMainMenuToggle.bind(this)}
         />
         <Drawer open={showMainMenu}
                 docked={false}
-                onRequestChange={e => onMainMenuToggle()}
+                onRequestChange={this.handleMainMenuToggle.bind(this)}
         >
-          <AppBar title="MTC"
+          <AppBar title='MTC'
                   showMenuIconButton={false}
                   iconElementRight={<IconButton><NavigationClose/></IconButton>}
-                  onRightIconButtonClick={e => onMainMenuToggle()}
-                  onRightIconButtonTouchTap={e => onMainMenuToggle()}
+                  onRightIconButtonClick={this.handleMainMenuToggle.bind(this)}
           />
-          <MenuItem onTouchTap={ pushAndToggle('/') }>
-            <FormattedMessage id="openSessions"/>
+          <MenuItem onClick={() => this.handleRouteChange('/') }>
+            <FormattedMessage id='openSessions'/>
           </MenuItem>
-          <MenuItem onTouchTap={ pushAndToggle('/completed') }>
-            <FormattedMessage id="completedSessions"/>
+          <MenuItem onClick={() => this.handleRouteChange('/completed') }>
+            <FormattedMessage id='completedSessions'/>
           </MenuItem>
         </Drawer>
       </div>

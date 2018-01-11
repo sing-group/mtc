@@ -24,7 +24,7 @@ import {Card, CardActions, CardText, CardTitle} from "material-ui/Card";
 import FlatButton from "material-ui/FlatButton";
 import LinearProgress from "material-ui/LinearProgress";
 import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
-import Session from "../domain/Session.class";
+import Session from '@sing-group/mtc-games/src/session/Session';
 
 const style = {
   actions: {
@@ -44,7 +44,9 @@ class SessionCard extends Component {
   static get propTypes() {
     return {
       session: PropTypes.instanceOf(Session).isRequired,
-      intl: PropTypes.func.isRequired
+      intl: PropTypes.shape({
+        formatMessage: PropTypes.func.isRequired
+      })
     };
   }
 

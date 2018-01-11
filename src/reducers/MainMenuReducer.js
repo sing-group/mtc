@@ -18,13 +18,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import Reducer from './Reducer.js';
+import Reducer from './Reducer';
 
 class MainMenuReductions {
   toggleMainMenu(state) {
     return Object.assign({}, state,
       {
-        showMainMenu: !state.showMainMenu
+        menu: {
+          showMainMenu: !state.menu.showMainMenu
+        }
       }
     );
   }

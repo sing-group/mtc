@@ -20,72 +20,112 @@
  */
 import React from 'react';
 import Header from './Header.jsx';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import SessionList from './SessionList.jsx';
-import { withRouter } from 'react-router';
+import {withRouter} from 'react-router';
 import {
   HashRouter as Router,
-  Route
+  Route,
+  Switch,
+  Redirect
 } from 'react-router-dom';
-import { injectIntl } from 'react-intl';
-import { updateIntl } from 'react-intl-redux';
+import {injectIntl} from 'react-intl';
+import {updateIntl} from 'react-intl-redux';
+import MenusActions from "../actions/MenusActions";
+import Login from "./Login.jsx";
+import LoginActions from "../actions/LoginActions";
+import PropTypes from "prop-types";
 
-const mapStateToPropsSessionList = state => {
-  return {
-    sessions: state.mtc.sessions
-  };
-};
+const mapStateToPropsLayout = state => ({
+  isLoggedIn: state.mtc.user.isLoggedIn
+});
 
-const mapStateToPropsCompletedSessionList = state => {
-  return {
-    sessions: state.mtc.completedSessions
-  };
-};
+const mapStateToPropsSessionList = state => ({
+  sessions: state.mtc.sessions
+});
 
-const mapStateToPropsHeader = state => {
-  return {
-    showMainMenu: state.mtc.showMainMenu,
-    showUserMenu: state.mtc.showUserMenu,
-    userMenuTarget: state.mtc.userMenuTarget
-  };
-};
+const mapStateToPropsCompletedSessionList = state => ({
+  sessions: state.mtc.completedSessions
+});
 
-const mapDispatchToPropsHeader = dispatch => {
-  return {
-    onMainMenuToggle: () => {
-      dispatch({ type: 'TOGGLE_MAIN_MENU' });
-    },
-    onLanguageChange: (locale, messages) => {
-      dispatch(updateIntl({ locale, messages }));
-    }
-  };
-};
+const mapStateToPropsHeader = state => ({
+  showMainMenu: state.mtc.menu.showMainMenu
+});
+
+const mapDispatchToPropsHeader = dispatch => ({
+  onMainMenuToggle: () => {
+    dispatch(MenusActions.toggleMainMenu());
+  },
+  onLanguageChange: (locale, messages) => {
+    dispatch(updateIntl({locale, messages}));
+  },
+  onLogout: () => {
+    dispatch(LoginActions.logoutRequested());
+  }
+});
+
+const mapStateToPropsLogin = state => ({
+  disabled: state.mtc.user.loginRequested,
+  loginError: state.mtc.user.loginError
+});
+
+const mapDispatchToLogin = dispatch => ({
+  onLogin: (username, password) => {
+    dispatch(LoginActions.loginRequested(username, password));
+  },
+  onLanguageChange: (locale, messages) => {
+    dispatch(updateIntl({locale, messages}));
+  }
+});
+
+const ConnectedLogin = injectIntl(connect(
+  mapStateToPropsLogin,
+  mapDispatchToLogin
+)(Login));
 
 const ConnectedHeader = injectIntl(withRouter(connect(
   mapStateToPropsHeader,
   mapDispatchToPropsHeader
 )(Header)));
 
-const ConnectedSessionList = connect(
+const ConnectedSessionList = injectIntl(connect(
   mapStateToPropsSessionList
-)(SessionList);
+)(SessionList));
 
-const ConnectedCompletedSessionList = connect(
+const ConnectedCompletedSessionList = injectIntl(connect(
   mapStateToPropsCompletedSessionList
-)(SessionList);
+)(SessionList));
 
 class Layout extends React.Component {
+  static get propTypes() {
+    return {
+      isLoggedIn: PropTypes.bool.isRequired
+    };
+  }
+
   render() {
-    return (
-      <Router>
+    if (this.props.isLoggedIn) {
+      return <Router>
         <div>
-            <ConnectedHeader/>
+          <ConnectedHeader/>
+          <Switch>
             <Route exact path="/" component={ConnectedSessionList}/>
             <Route exact path="/completed" component={ConnectedCompletedSessionList}/>
+            <Redirect to="/"/>
+          </Switch>
         </div>
-      </Router>
-    );
+      </Router>;
+    } else {
+      return <Router>
+        <Switch>
+          <Route exact path="/" component={ConnectedLogin}/>
+          <Redirect to="/"/>
+        </Switch>
+      </Router>;
+    }
   }
-};
+}
 
-export default Layout;
+export default injectIntl(connect(
+  mapStateToPropsLayout
+)(Layout));

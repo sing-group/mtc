@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from 'react';
+import React, {Component} from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Layout from './Layout.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -30,7 +30,7 @@ import lightBaseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
 
 const muiTheme = getMuiTheme(lightBaseTheme);
 
-export default class App extends React.Component {
+export default class App extends Component {
   render() {
     return (
       <BrowserRouter>
