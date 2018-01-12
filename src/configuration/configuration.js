@@ -18,6 +18,4 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-export const LEFT_MENU_WIDTH = 200;
-
 export const API_URL = 'http://0.0.0.0:8080/mtc/rest/api';

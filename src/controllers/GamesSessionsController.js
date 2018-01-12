@@ -18,10 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+import StoreListener from './StoreListener';
+
+import GamesSessionEndpoint from '../endpoint/GamesSessionEndpoint';
+
 import check from 'check-types';
-import StoreListener from "./StoreListener";
-import GamesSessionEndpoint from "../endpoint/GamesSessionEndpoint";
 
 export default class GamesSessionsController {
   constructor(endpoint) {

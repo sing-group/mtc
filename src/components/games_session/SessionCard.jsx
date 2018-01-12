@@ -18,23 +18,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React, {Component} from "react";
-import PropTypes from 'prop-types';
-import {Card, CardActions, CardText, CardTitle} from "material-ui/Card";
-import FlatButton from "material-ui/FlatButton";
-import LinearProgress from "material-ui/LinearProgress";
+import React, {Component} from 'react';
 import {FormattedMessage, FormattedDate} from 'react-intl';
-import AssignedGamesSession from '../../../../mtc-games/src/games_session/AssignedGamesSession';
+import PropTypes from 'prop-types';
+
+import {Card, CardActions, CardText, CardTitle} from 'material-ui/Card';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import LinearProgress from 'material-ui/LinearProgress';
 import {
   Step,
   Stepper,
   StepLabel,
   StepContent,
 } from 'material-ui/Stepper';
-import Dialog from 'material-ui/Dialog';
-import GamePanel from '../games/GamePanel.jsx';
-import Locales from "../../i18n/Locales";
-import Messages from "../../i18n/Messages";
+
+import GamePanel from '../games/GamePanel';
+
+import Locales from '../../i18n/Locales';
+import Messages from '../../i18n/Messages';
+import AssignedGamesSession from '../../../../mtc-games/src/games_session/AssignedGamesSession';
 
 export const style = {
   actions: {
@@ -59,7 +62,8 @@ export default class SessionCard extends Component {
     return {
       session: PropTypes.instanceOf(AssignedGamesSession).isRequired,
       intl: PropTypes.shape({
-        locale: PropTypes.string
+        formatMessage: PropTypes.func.isRequired,
+        locale: PropTypes.string.isRequired
       })
     };
   }

@@ -18,37 +18,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from "react";
-import {combineReducers, createStore} from "redux";
-import {intlReducer, Provider} from "react-intl-redux";
-import ReactDOM from "react-dom";
-import App from "../components/App.jsx";
-import injectTapEventPlugin from "react-tap-event-plugin";
-import UserMenuReducer from "../reducers/UserMenuReducer.js";
-import MainMenuReducer from "../reducers/MainMenuReducer.js";
-import Reducer from "../reducers/Reducer.js";
+import React from 'react';
+import ReactDOM from 'react-dom';
 import {addLocaleData} from 'react-intl';
+import {intlReducer, Provider} from 'react-intl-redux';
 import en from 'react-intl/locale-data/en';
 import gl from 'react-intl/locale-data/gl';
 import es from 'react-intl/locale-data/es';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+import {combineReducers, createStore} from 'redux';
+
+import App from '../components/App';
 import Locales from '../i18n/Locales';
+
+import WebFontLoader from 'webfontloader';
+import './main.css';
 
 import 'pixi';
 import 'p2';
 
-import './main.css';
+import Reducer from '../reducers/Reducer';
+import GamesSessionsReducer from '../reducers/GamesSessionsReducer';
+import LoginReducer, {LoginReductions} from '../reducers/LoginReducer';
+import MainMenuReducer from '../reducers/MainMenuReducer';
+import UserMenuReducer from '../reducers/UserMenuReducer';
 
-import WebFontLoader from 'webfontloader';
-import LoginController from "../controllers/LoginController";
-import UserEndpoint from "../endpoint/UserEndpoint";
-import EndpointPathBuilder from "../endpoint/EndpointPathBuilder";
-import {JsonRestBroker} from "../endpoint/JsonRestBroker";
+import EndpointPathBuilder from '../endpoint/EndpointPathBuilder';
+import JsonRestBroker from '../endpoint/JsonRestBroker';
+
+import GamesSessionEndpoint from '../endpoint/GamesSessionEndpoint';
+import UserEndpoint from '../endpoint/UserEndpoint';
+
+import GamesSessionsController from '../controllers/GamesSessionsController';
+import LoginController from '../controllers/LoginController';
+
 import { API_URL } from '../configuration/configuration';
-import LoginReducer from "../reducers/LoginReducer";
-import LoginReductions from "../reducers/LoginReducer";
-import GamesSessionsReducer from "../reducers/GamesSessionsReducer";
-import GamesSessionEndpoint from "../endpoint/GamesSessionEndpoint";
-import GamesSessionsController from "../controllers/GamesSessionsController";
+
 
 WebFontLoader.load({
   google: {

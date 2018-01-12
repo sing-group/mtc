@@ -19,23 +19,27 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
-import Header from './Header.jsx';
 import {connect} from 'react-redux';
+import {injectIntl} from 'react-intl';
+import {updateIntl} from 'react-intl-redux';
 import {withRouter} from 'react-router';
+import PropTypes from 'prop-types';
+
 import {
   HashRouter as Router,
   Route,
   Switch,
   Redirect
 } from 'react-router-dom';
-import {injectIntl} from 'react-intl';
-import {updateIntl} from 'react-intl-redux';
-import MenusActions from "../actions/MenusActions";
-import Login from "./Login.jsx";
-import LoginActions from "../actions/LoginActions";
-import PropTypes from "prop-types";
-import GamesSessionActions from "../actions/GamesSessionActions";
-import SessionPanel from "./games_session/SessionPanel.jsx";
+
+import Header from './Header';
+import Login from './Login';
+import SessionPanel from './games_session/SessionPanel';
+
+import MenusActions from '../actions/MenusActions';
+import LoginActions from '../actions/LoginActions';
+import GamesSessionActions from '../actions/GamesSessionActions';
+
 
 const mapStateToPropsLayout = state => ({
   isLoggedIn: state.mtc.user.isLoggedIn

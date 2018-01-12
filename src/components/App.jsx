@@ -19,14 +19,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React, {Component} from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import Layout from './Layout.jsx';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'mdbootstrap/css/mdb.min.css';
+
+import { BrowserRouter } from 'react-router-dom';
+
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 
-import lightBaseTheme from "material-ui/styles/baseThemes/lightBaseTheme";
+import Layout from './Layout';
 
 const muiTheme = getMuiTheme(lightBaseTheme);
 
@@ -40,4 +43,4 @@ export default class App extends Component {
       </BrowserRouter>
     );
   }
-};
+}

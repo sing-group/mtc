@@ -18,12 +18,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import React, {Component} from 'react';
-import PropTypes from "prop-types";
-import SessionList from "./SessionList.jsx";
-import AssignedGamesSession from '../../../../mtc-games/src/games_session/AssignedGamesSession';
+import PropTypes from 'prop-types';
+
 import CircularProgress from 'material-ui/CircularProgress';
+
+import SessionList from './SessionList';
+
+import AssignedGamesSession from '../../../../mtc-games/src/games_session/AssignedGamesSession';
 
 const style = {
   container: {

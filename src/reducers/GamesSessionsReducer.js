@@ -18,9 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-import Reducer from "./Reducer";
-import Locales from "../i18n/Locales";
+import Reducer from './Reducer';
+import Locales from '../i18n/Locales';
 
 class GamesSessionsReductions {
   assignedGamesSessionsRequested(state) {

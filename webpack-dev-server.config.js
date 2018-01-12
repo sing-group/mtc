@@ -106,10 +106,11 @@ module.exports = {
     tls: 'empty'
   },
   resolve: {
+    extensions: ['.js', '.jsx'],
     alias: {
       'phaser': phaser,
       'pixi': pixi,
       'p2': p2
     }
   }
-}
+};

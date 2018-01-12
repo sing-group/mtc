@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import AssignedGamesSession from '@sing-group/mtc-games/src/games_session/AssignedGamesSession';
+
 import check from "check-types";
 
 export default class GamesSessionActions {

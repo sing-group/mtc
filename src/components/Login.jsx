@@ -18,17 +18,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
+
 import {Card, CardActions, CardTitle, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
-import PropTypes from "prop-types";
-import Messages from "../i18n/Messages";
-import Locales from "../i18n/Locales";
-import check from "check-types";
-import LanguageMenu from "./common/LanguageMenu.jsx";
-import { FormattedMessage } from 'react-intl';
+
+import Messages from '../i18n/Messages';
+import Locales from '../i18n/Locales';
+import LanguageMenu from './common/LanguageMenu';
+
+import check from 'check-types';
 
 export default class Login extends React.Component {
   static get propTypes() {

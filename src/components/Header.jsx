@@ -19,19 +19,23 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import React from 'react';
-import AppBar from 'material-ui/AppBar';
-import Drawer from 'material-ui/Drawer';
-import MenuItem from 'material-ui/MenuItem';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
-import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import Divider from 'material-ui/Divider';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import ActionLanguage from 'material-ui/svg-icons/action/language';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
+
+import AppBar from 'material-ui/AppBar';
+import Divider from 'material-ui/Divider';
+import Drawer from 'material-ui/Drawer';
+import IconButton from 'material-ui/IconButton';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import ActionLanguage from 'material-ui/svg-icons/action/language';
+
+import LanguageMenu from './common/LanguageMenu';
+
 import Locales from '../i18n/Locales';
-import LanguageMenu from './common/LanguageMenu.jsx';
 
 export default class Header extends React.Component {
   static get propTypes() {
@@ -96,11 +100,11 @@ export default class Header extends React.Component {
                   targetOrigin={{horizontal: 'right', vertical: 'top'}}
         >
           <MenuItem>
-            <FormattedMessage id='settings'/>
+            <FormattedMessage id="settings"/>
           </MenuItem>
           <Divider/>
           <MenuItem onClick={this.handleLogout.bind(this)}>
-            <FormattedMessage id='exit'/>
+            <FormattedMessage id="exit"/>
           </MenuItem>
         </IconMenu>
       </div>
@@ -108,7 +112,7 @@ export default class Header extends React.Component {
 
     return (
       <div>
-        <AppBar title='MultiTasking Cubes'
+        <AppBar title="MultiTasking Cubes"
                 iconElementRight={settingsMenu}
                 onLeftIconButtonClick={this.handleMainMenuToggle.bind(this)}
         />
@@ -116,16 +120,16 @@ export default class Header extends React.Component {
                 docked={false}
                 onRequestChange={this.handleMainMenuToggle.bind(this)}
         >
-          <AppBar title='MTC'
+          <AppBar title="MTC"
                   showMenuIconButton={false}
                   iconElementRight={<IconButton><NavigationClose/></IconButton>}
                   onRightIconButtonClick={this.handleMainMenuToggle.bind(this)}
           />
           <MenuItem onClick={() => this.handleRouteChange('/') }>
-            <FormattedMessage id='sessions.opened'/>
+            <FormattedMessage id="sessions.opened"/>
           </MenuItem>
           <MenuItem onClick={() => this.handleRouteChange('/completed') }>
-            <FormattedMessage id='sessions.completed'/>
+            <FormattedMessage id="sessions.completed"/>
           </MenuItem>
         </Drawer>
       </div>

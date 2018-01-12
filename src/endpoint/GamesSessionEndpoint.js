@@ -18,14 +18,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import EndpointPathBuilder from './EndpointPathBuilder';
+import JsonRestBroker from './JsonRestBroker';
 
-import EndpointPathBuilder from "./EndpointPathBuilder";
-import {JsonRestBroker} from "./JsonRestBroker";
-import check from "check-types";
+import GamesSessionActions from '../actions/GamesSessionActions';
+
+import AssignedGamesSession from '@sing-group/mtc-games/src/games_session/AssignedGamesSession';
 import GameBuilder from '@sing-group/mtc-games/src/game/GameBuilder';
 import GamesSessionMetadata from '@sing-group/mtc-games/src/games_session/GamesSessionMetadata';
-import AssignedGamesSession from '@sing-group/mtc-games/src/games_session/AssignedGamesSession';
-import GamesSessionActions from "../actions/GamesSessionActions";
+
+import check from 'check-types';
 
 export default class GamesSessionEndpoint {
   constructor(pathBuilder, restBroker, store) {

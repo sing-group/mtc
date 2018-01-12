@@ -18,10 +18,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import es_ES from './es_ES';
 import gl_ES from './gl_ES';
 import en_US from './en_US';
+
 import es_ES_Games from '@sing-group/mtc-games/src/i18n/es_ES';
 import gl_ES_Games from '@sing-group/mtc-games/src/i18n/gl_ES';
 import en_US_Games from '@sing-group/mtc-games/src/i18n/en_US';

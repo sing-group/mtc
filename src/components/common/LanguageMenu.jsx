@@ -18,13 +18,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 import React, {Component} from 'react';
-import PropTypes from "prop-types";
-import Locales from "../../i18n/Locales";
-import Messages from "../../i18n/Messages";
+import PropTypes from 'prop-types';
+
 import MenuItem from 'material-ui/MenuItem';
 import IconMenu from 'material-ui/IconMenu';
+
+import Locales from '../../i18n/Locales';
+import Messages from '../../i18n/Messages';
 
 export default class LanguageMenu extends Component {
   static get propTypes() {

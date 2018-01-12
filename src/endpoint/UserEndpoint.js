@@ -18,11 +18,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import EndpointPathBuilder from './EndpointPathBuilder';
+import JsonRestBroker from './JsonRestBroker';
+
+import LoginActions from '../actions/LoginActions';
+
 import check from 'check-types';
-import {JsonRestBroker} from './JsonRestBroker';
-import LoginActions from "../actions/LoginActions";
-import EndpointPathBuilder from "./EndpointPathBuilder";
- 
+
 export default class UserEndpoint {
   constructor(pathBuilder, restBroker, store) {
     check.assert.instance(pathBuilder, EndpointPathBuilder, 'pathBuilder should be an instance of EndpointPathBuilder');
@@ -39,7 +41,7 @@ export default class UserEndpoint {
     this._rest.get(path)
       .then(response => {
         if (response.status === 200) {
-          if (response.data === "PATIENT") {
+          if (response.data === 'PATIENT') {
             this._store.dispatch(LoginActions.userLogged(user));
           } else {
             this._store.dispatch(LoginActions.userLoginFailed(user, 'Invalid role: ' + response.data));

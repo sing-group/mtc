@@ -18,11 +18,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
- 
 import check from 'check-types';
 import {create} from 'apisauce';
 
-export class JsonRestBroker {
+export default class JsonRestBroker {
   constructor(apiUrl, tokenProvider) {
     check.assert.nonEmptyString(apiUrl, 'apiUrl should be a non empty string');
     check.assert.function(tokenProvider, 'tokenProvider should be a function');

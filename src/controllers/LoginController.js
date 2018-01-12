@@ -18,10 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
- 
-import UserEndpoint from "../endpoint/UserEndpoint";
+import StoreListener from './StoreListener';
+
+import UserEndpoint from '../endpoint/UserEndpoint';
+
 import check from 'check-types';
-import StoreListener from "./StoreListener";
 
 export default class LoginController {
   constructor(endpoint) {
@@ -36,24 +37,24 @@ export default class LoginController {
   }
 
   static getStoredUsername() {
-    return localStorage.getItem("username");
+    return localStorage.getItem('username');
   }
 
   static getStoredToken() {
-    return localStorage.getItem("token");
+    return localStorage.getItem('token');
   }
 
   static setStoredUsername(username) {
-    localStorage.setItem("username", username);
+    localStorage.setItem('username', username);
   }
 
   static setStoredToken(token) {
-    localStorage.setItem("token", token);
+    localStorage.setItem('token', token);
   }
 
   static clearStoredCredentials() {
-    localStorage.removeItem("username");
-    localStorage.removeItem("token");
+    localStorage.removeItem('username');
+    localStorage.removeItem('token');
   }
 
   subscribeTo(store) {

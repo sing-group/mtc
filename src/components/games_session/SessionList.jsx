@@ -18,17 +18,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-import React from "react";
-import Grid from "react-bootstrap/lib/Grid";
-import Row from "react-bootstrap/lib/Row";
-import Col from "react-bootstrap/lib/Col";
-import SessionCard, {style as sessionCardStyle} from "./SessionCard.jsx";
-import Paper from "material-ui/Paper";
-import PropTypes from "prop-types";
-import AssignedGamesSession from '../../../../mtc-games/src/games_session/AssignedGamesSession';
-import {Card, CardText, CardTitle} from "material-ui/Card";
+import React from 'react';
 import {FormattedMessage} from 'react-intl';
+import PropTypes from 'prop-types';
 
+import Grid from 'react-bootstrap/lib/Grid';
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
+
+import {Card, CardText, CardTitle} from 'material-ui/Card';
+import Paper from 'material-ui/Paper';
+
+import SessionCard, {style as sessionCardStyle} from './SessionCard';
+
+import AssignedGamesSession from '../../../../mtc-games/src/games_session/AssignedGamesSession';
 
 export const style = {
   column: {
@@ -80,7 +83,7 @@ export default class SessionList extends React.Component {
   }
 
   render() {
-    const paperClass = this.props.animated ? "animated fadeIn" : "";
+    const paperClass = this.props.animated ? 'animated fadeIn' : '';
 
     if (this.props.sessions.length === 0) {
       return (
