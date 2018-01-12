@@ -21,7 +21,6 @@
 const en_US = {
   exit: 'Exit',
   settings: 'Settings',
-  start: 'Start',
   'locale.es': 'Spanish',
   'locale.gl': 'Galician',
   'locale.en': 'English',
@@ -31,6 +30,9 @@ const en_US = {
   'login.doLogin': 'Login',
   'login.changeLanguage': 'Change Language',
   'login.invalidCredentials': 'Invalid user or password',
+  'game.title': 'Game',
+  'game.start': 'Start',
+  'game.exit': 'Exit',
   'sessions.opened': 'Open sessions',
   'sessions.completed': 'Completed sessions',
   'sessions.title': "Game Sessions",

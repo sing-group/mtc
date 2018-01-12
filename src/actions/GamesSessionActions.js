@@ -19,6 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import AssignedGamesSession from '@sing-group/mtc-games/src/games_session/AssignedGamesSession';
 import check from "check-types";
 
 export default class GamesSessionActions {
@@ -29,6 +30,9 @@ export default class GamesSessionActions {
   }
 
   static assignedGamesSessionsUpdated(sessions, messages) {
+    check.assert.array.of.instance(sessions, AssignedGamesSession, 'sessions should be an array of AssignedGamesSession');
+    check.assert.object(messages, 'messages should be an object');
+
     return {
       type: 'ASSIGNED_GAMES_SESSIONS_UPDATED',
       sessions: sessions,

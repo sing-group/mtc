@@ -23,14 +23,15 @@ import EndpointPathBuilder from "./EndpointPathBuilder";
 import {JsonRestBroker} from "./JsonRestBroker";
 import check from "check-types";
 import GameBuilder from '@sing-group/mtc-games/src/game/GameBuilder';
-import SessionMetadata from '@sing-group/mtc-games/src/session/SessionMetadata';
-import AssignedGamesSession from "../domain/AssignedGamesSession";
+import GamesSessionMetadata from '@sing-group/mtc-games/src/games_session/GamesSessionMetadata';
+import AssignedGamesSession from '@sing-group/mtc-games/src/games_session/AssignedGamesSession';
 import GamesSessionActions from "../actions/GamesSessionActions";
 
 export default class GamesSessionEndpoint {
   constructor(pathBuilder, restBroker, store) {
     check.assert.instance(pathBuilder, EndpointPathBuilder, 'pathBuilder should be an instance of EndpointPathBuilder');
     check.assert.instance(restBroker, JsonRestBroker, 'restBroker should be an instance of JsonRestBroker');
+    check.assert.object(store, 'store should be an object');
 
     this._pathBuilder = pathBuilder;
     this._rest = restBroker;
@@ -41,13 +42,12 @@ export default class GamesSessionEndpoint {
     const path = this._pathBuilder.assignedSessions(username);
 
     this._rest.get(path)
-      .then(response => {
-        return Promise.all(response.data.map(assignedSession =>
-          this.completeAssignedSession(assignedSession)
-        ));
-      })
+      .then(response => Promise.all(response.data.map(assignedSession =>
+          this._completeAssignedGamesSessionJson(assignedSession)
+      )))
       .then(assignedSessions => {
-        assignedSessions = this.mergeAssignedSessions(assignedSessions);
+        assignedSessions = this._mergeData(assignedSessions);
+
         this._store.dispatch(
           GamesSessionActions.assignedGamesSessionsUpdated(
             assignedSessions.sessions, assignedSessions.messages
@@ -55,69 +55,56 @@ export default class GamesSessionEndpoint {
       });
   }
 
-  mergeAssignedSessions(assignedSessions) {
-    const merged = {
-      messages: {},
-      sessions: []
-    };
-
-    assignedSessions.forEach(session => {
-      merged.messages = this.mergeMessages(merged.messages, session.messages);
-      merged.sessions.push(session.session);
-    });
-
-    return merged;
-  }
-
-  completeAssignedSession(assignedSession) {
-    return this._rest.get(assignedSession.gamesSession.uri)
+  _completeAssignedGamesSessionJson(sessionJson) {
+    return this._rest.get(sessionJson.gamesSession.uri)
       .then(response => {
-        assignedSession.gamesSession = response.data;
+        sessionJson.gamesSession = response.data;
         return {
-          messages: this.mapAssignedGamesSessionToLocaleMessages(assignedSession),
-          session: this.mapAssignedGamesSessionToSessionMetadata(assignedSession)
+          messages: this._mapJsonToLocaleMessages(sessionJson),
+          session: this._mapJsonToAssignedGamesSession(sessionJson)
         };
       });
   }
 
-  mapAssignedGamesSessionToSessionMetadata(session) {
-    const gamesSession = session.gamesSession;
+  _mapJsonToAssignedGamesSession(sessionJson) {
+    const gamesSession = sessionJson.gamesSession;
 
     const gameConfigs = gamesSession.gameConfiguration.map(gameConfig => {
-      return this.mapGameConfigurationToGameConfig(gameConfig)
+      return this._mapJsonToGameConfig(gameConfig)
     });
 
     return new AssignedGamesSession(
-      new Date(session.startDate),
-      new Date(session.endDate),
-      new SessionMetadata(
+      new GamesSessionMetadata(
         `session.${gamesSession.id}.name`,
         `session.${gamesSession.id}.description`,
         gameConfigs
-      )
+      ),
+      new Date(sessionJson.startDate),
+      new Date(sessionJson.endDate),
+      []
     );
   }
 
-  mapGameConfigurationToGameConfig(gameConfiguration) {
-    const config = GameBuilder.gameConfigForId(gameConfiguration.gameId);
+  _mapJsonToGameConfig(gameConfigJson) {
+    const config = GameBuilder.gameConfigForId(gameConfigJson.gameId);
 
-    gameConfiguration.parameter.forEach(parameter => {
+    gameConfigJson.parameter.forEach(parameter => {
       config[parameter.key] = parameter.value;
     });
 
     return config;
   }
 
-  mapAssignedGamesSessionToLocaleMessages(session) {
-    const gamesSession = session.gamesSession;
+  _mapJsonToLocaleMessages(sessionJson) {
+    const gamesSession = sessionJson.gamesSession;
 
-    const names = this.mapMessages(`session.${gamesSession.id}.name`, gamesSession.name.values);
-    const descriptions = this.mapMessages(`session.${gamesSession.id}.description`, gamesSession.description.values);
+    const names = this._mapMessages(`session.${gamesSession.id}.name`, gamesSession.name.values);
+    const descriptions = this._mapMessages(`session.${gamesSession.id}.description`, gamesSession.description.values);
 
-    return this.mergeMessages(names, descriptions);
+    return this._mergeMessages(names, descriptions);
   }
 
-  mapMessages(type, messages) {
+  _mapMessages(type, messages) {
     return messages.map(message => ({
       [message.key]: {
         [type]: message.value
@@ -126,7 +113,7 @@ export default class GamesSessionEndpoint {
     .reduce((prev, next) => Object.assign(prev, next), {});
   }
 
-  mergeMessages(message1, message2) {
+  _mergeMessages(message1, message2) {
     const props = new Set();
     Object.keys(message1).forEach(key => props.add(key));
     Object.keys(message2).forEach(key => props.add(key));
@@ -143,6 +130,20 @@ export default class GamesSessionEndpoint {
         Object.assign(merged[key], message2[key]);
       }
     }
+
+    return merged;
+  }
+
+  _mergeData(assignedSessions) {
+    const merged = {
+      messages: {},
+      sessions: []
+    };
+
+    assignedSessions.forEach(session => {
+      merged.messages = this._mergeMessages(merged.messages, session.messages);
+      merged.sessions.push(session.session);
+    });
 
     return merged;
   }

@@ -21,7 +21,6 @@
 const es_ES = {
   exit: 'Salir',
   settings: 'Configuración',
-  start: 'Empezar',
   'locale.es': 'Español',
   'locale.gl': 'Gallego',
   'locale.en': 'Inglés',
@@ -31,6 +30,9 @@ const es_ES = {
   'login.doLogin': 'Entrar',
   'login.changeLanguage': 'Cambiar Idioma',
   'login.invalidCredentials': 'Usuario o contraseña no válidos',
+  'game.title': 'Juego',
+  'game.start': 'Empezar',
+  'game.exit': 'Salir',
   'sessions.opened': 'Sesiones pendientes',
   'sessions.completed': 'Sesiones completas',
   'sessions.title': "Sesiones de Juegos",

@@ -21,8 +21,8 @@
 
 import React, {Component} from 'react';
 import PropTypes from "prop-types";
-import Locales from "../i18n/Locales";
-import Messages from "../i18n/Messages";
+import Locales from "../../i18n/Locales";
+import Messages from "../../i18n/Messages";
 import MenuItem from 'material-ui/MenuItem';
 import IconMenu from 'material-ui/IconMenu';
 

@@ -31,7 +31,7 @@ import ActionLanguage from 'material-ui/svg-icons/action/language';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import Locales from '../i18n/Locales';
-import LanguageMenu from './LanguageMenu.jsx';
+import LanguageMenu from './common/LanguageMenu.jsx';
 
 export default class Header extends React.Component {
   static get propTypes() {

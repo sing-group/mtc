@@ -23,28 +23,42 @@ const LOGIN = Symbol();
 const LOCALE = Symbol();
 
 export default class Messages {
+  static gameName(nameId) {
+    return {
+      id: nameId,
+      defaultMessage: 'game'
+    };
+  }
+
+  static gameTitle() {
+    return {
+      id: 'game.title',
+      defaultMessage: 'Game'
+    };
+  }
+  
   static get login() {
     if (!Messages[LOGIN]) {
       Messages[LOGIN] = {
         title: {
-          id: "login.title",
-          defaultMessage: "MultiTasking Cubes"
+          id: 'login.title',
+          defaultMessage: 'MultiTasking Cubes'
         },
         username: {
-          id: "login.username",
-          defaultMessage: "User"
+          id: 'login.username',
+          defaultMessage: 'User'
         },
         password: {
-          id: "login.password",
-          defaultMessage: "Password"
+          id: 'login.password',
+          defaultMessage: 'Password'
         },
         doLogin: {
-          id: "login.doLogin",
-          defaultMessage: "Login"
+          id: 'login.doLogin',
+          defaultMessage: 'Login'
         },
         changeLanguage: {
-          id: "login.changeLanguage",
-          defaultMessage: "Change Language"
+          id: 'login.changeLanguage',
+          defaultMessage: 'Change Language'
         }
       };
 
@@ -58,16 +72,16 @@ export default class Messages {
     if (!Messages[LOCALE]) {
       Messages[LOCALE] = {
         es: {
-          id: "locale.es",
-          defaultMessage: "Spanish"
+          id: 'locale.es',
+          defaultMessage: 'Spanish'
         },
         gl: {
-          id: "locale.gl",
-          defaultMessage: "Galician"
+          id: 'locale.gl',
+          defaultMessage: 'Galician'
         },
         en: {
-          id: "locale.en",
-          defaultMessage: "English"
+          id: 'locale.en',
+          defaultMessage: 'English'
         }
       };
 
@@ -84,7 +98,7 @@ export default class Messages {
       if (object.hasOwnProperty(property)) {
         const value = object[property];
 
-        if (value !== null && (typeof value === "object") && !Object.isFrozen(value)) {
+        if (value !== null && (typeof value === 'object') && !Object.isFrozen(value)) {
           Messages._deepFreeze(object[property]);
         }
       }

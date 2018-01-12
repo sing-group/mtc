@@ -21,7 +21,6 @@
 const gl_ES = {
   exit: 'Saír',
   settings: 'Configuración',
-  start: 'Comezar',
   'locale.es': 'Castelán',
   'locale.gl': 'Galego',
   'locale.en': 'Inglés',
@@ -31,6 +30,9 @@ const gl_ES = {
   'login.doLogin': 'Entrar',
   'login.changeLanguage': 'Cambiar Linguaxe',
   'login.invalidCredentials': 'Usuario ou contrasinal non válidos',
+  'game.title': 'Xogo',
+  'game.start': 'Comezar',
+  'game.exit': 'Saír',
   'sessions.opened': 'Sesións pendentes',
   'sessions.completed': 'Sesiones completas',
   'sessions.title': "Sesións de Xogos",

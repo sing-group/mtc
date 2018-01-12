@@ -19,30 +19,34 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import check from 'check-types';
-import SessionMetadata from '@sing-group/mtc-games/src/session/SessionMetadata';
+import React, {Component} from 'react';
+import PropTypes from "prop-types";
+import GameConfig from '../../../../mtc-games/src/game/GameConfig';
+import GameBuilder from '../../../../mtc-games/src/game/GameBuilder';
 
-export default class AssignedGamesSession {
-  constructor(
-    startDate, endDate,
-    sessionMetadata
-  ) {
-    check.assert.instance(sessionMetadata, SessionMetadata, 'sessionMetadata should be an instance of SessionMetadata');
-
-    this._startDate = startDate;
-    this._endDate = endDate;
-    this._sessionMetadata = sessionMetadata;
+export default class GamePanel extends Component {
+  static get propTypes() {
+    return {
+      gameConfig: PropTypes.instanceOf(GameConfig).isRequired
+    };
   }
 
-  get startDate() {
-    return this._startDate;
+  componentDidMount() {
+    const {gameConfig} = this.props;
+
+    const builder = new GameBuilder();
+    builder.buildGame(gameConfig);
   }
 
-  get endDate() {
-    return this._endDate;
-  }
+  render() {
+    const {gameConfig} = this.props;
 
-  get sessionMetadata() {
-    return this._sessionMetadata;
+    const style = {
+      margin: 'auto',
+      height: gameConfig.height,
+      width: gameConfig.width
+    };
+
+    return <div id={gameConfig.domId} style={style}/>;
   }
 }

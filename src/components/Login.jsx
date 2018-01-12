@@ -27,7 +27,7 @@ import PropTypes from "prop-types";
 import Messages from "../i18n/Messages";
 import Locales from "../i18n/Locales";
 import check from "check-types";
-import LanguageMenu from "./LanguageMenu.jsx";
+import LanguageMenu from "./common/LanguageMenu.jsx";
 import { FormattedMessage } from 'react-intl';
 
 export default class Login extends React.Component {

@@ -21,7 +21,6 @@
 import React from 'react';
 import Header from './Header.jsx';
 import {connect} from 'react-redux';
-import SessionList from './SessionList.jsx';
 import {withRouter} from 'react-router';
 import {
   HashRouter as Router,
@@ -36,7 +35,7 @@ import Login from "./Login.jsx";
 import LoginActions from "../actions/LoginActions";
 import PropTypes from "prop-types";
 import GamesSessionActions from "../actions/GamesSessionActions";
-import SessionPanel from "./SessionPanel.jsx";
+import SessionPanel from "./games_session/SessionPanel.jsx";
 
 const mapStateToPropsLayout = state => ({
   isLoggedIn: state.mtc.user.isLoggedIn

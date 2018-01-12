@@ -25,6 +25,9 @@ import en_US from './en_US';
 import es_ES_Games from '@sing-group/mtc-games/src/i18n/es_ES';
 import gl_ES_Games from '@sing-group/mtc-games/src/i18n/gl_ES';
 import en_US_Games from '@sing-group/mtc-games/src/i18n/en_US';
+import I18NStatic from '@sing-group/mtc-games/src/i18n/I18NStatic';
+
+import check from 'check-types';
 
 const LOCALES = Symbol();
 
@@ -41,7 +44,6 @@ export default class Locales {
     return Locales[LOCALES];
   }
 
-
   static get LOCALE_IDS() {
     return [ 'es', 'gl', 'en' ];
   }
@@ -55,25 +57,43 @@ export default class Locales {
   }
 
   static getById(id) {
+    check.assert.assigned(Locales.LOCALES[id], 'id should be a valid Locale id');
+
     return Locales.LOCALES[id];
   }
 
   static getByIndex(index) {
+    check.assert.inRange(index, 0, Locales.LOCALE_IDS.length, 'index should be a valid index value');
+
     return Locales.LOCALES[Locales.LOCALE_IDS[index]];
   }
 
   static addLocales(messages) {
+    check.assert.object(messages, 'messages should be an object');
+
     Object.keys(messages).forEach(key => {
-      const parsedKey = Locales.parseId(key);
+      const parsedKey = Locales.mapMtcGamesToMtcId(key);
       Locales[LOCALES][parsedKey] = Object.assign(Locales[LOCALES][parsedKey], messages[key]);
     });
   }
 
-  static parseId(id) {
-    if (id.includes('_')) {
-      return id.substring(0, id.indexOf('_'));
-    } else {
-      return id;
+  static getI18NForLocale(locale) {
+    return new I18NStatic(Locales.mapMtcToMtcGamesId(locale));
+  }
+
+  static mapMtcGamesToMtcId(id) {
+    return id.substring(0, id.indexOf('_'));
+  }
+
+  static mapMtcToMtcGamesId(id) {
+    switch(id) {
+      case 'es':
+      case 'gl':
+        return id + '_ES';
+      case 'en':
+        return id + '_US';
+      default:
+        throw new Error('Unknown locale id: ' + id);
     }
   }
 }

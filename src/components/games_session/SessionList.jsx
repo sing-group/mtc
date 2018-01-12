@@ -25,7 +25,7 @@ import Col from "react-bootstrap/lib/Col";
 import SessionCard, {style as sessionCardStyle} from "./SessionCard.jsx";
 import Paper from "material-ui/Paper";
 import PropTypes from "prop-types";
-import AssignedGamesSession from '../domain/AssignedGamesSession';
+import AssignedGamesSession from '../../../../mtc-games/src/games_session/AssignedGamesSession';
 import {Card, CardText, CardTitle} from "material-ui/Card";
 import {FormattedMessage} from 'react-intl';
 

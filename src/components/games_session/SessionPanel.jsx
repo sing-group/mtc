@@ -22,7 +22,7 @@
 import React, {Component} from 'react';
 import PropTypes from "prop-types";
 import SessionList from "./SessionList.jsx";
-import AssignedGamesSession from '../domain/AssignedGamesSession';
+import AssignedGamesSession from '../../../../mtc-games/src/games_session/AssignedGamesSession';
 import CircularProgress from 'material-ui/CircularProgress';
 
 const style = {
