@@ -19,6 +19,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 import AssignedGamesSession from '@sing-group/mtc-games/src/games_session/AssignedGamesSession';
+import GameResult from '@sing-group/mtc-games/src/games_session/GameResult';
+import GameConfig from '@sing-group/mtc-games/src/game/GameConfig';
 
 import check from "check-types";
 
@@ -37,6 +39,44 @@ export default class GamesSessionActions {
       type: 'ASSIGNED_GAMES_SESSIONS_UPDATED',
       sessions: sessions,
       messages: messages
+    };
+  }
+
+  static gameStarted(assignedGamesSession, gameConfig) {
+    check.assert.instance(assignedGamesSession, AssignedGamesSession, 'assignedGamesSession should be an instance of AssignedGamesSession');
+    check.assert.instance(gameConfig, GameConfig, 'gameConfig should be an instance of GameConfig');
+
+    return {
+      type: 'GAME_STARTED',
+      assignedGamesSession: assignedGamesSession,
+      gameConfig: gameConfig
+    };
+  }
+
+  static gameFinished(gameResult) {
+    check.assert.instance(gameResult, GameResult, 'gameResult should be an instance of GameResult');
+
+    return {
+      type: 'GAME_FINISHED',
+      gameResult: gameResult
+    };
+  }
+
+  static gameResultStorageRequested(gameResult) {
+    check.assert.instance(gameResult, GameResult, 'gameResult should be an instance of GameResult');
+
+    return {
+      type: 'GAME_RESULT_STORAGE_REQUESTED',
+      gameResult: gameResult
+    };
+  }
+
+  static gameResultStored(gameResult) {
+    check.assert.instance(gameResult, GameResult, 'gameResult should be an instance of GameResult');
+
+    return {
+      type: 'GAME_RESULT_STORED',
+      gameResult: gameResult
     };
   }
 }

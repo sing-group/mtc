@@ -24,8 +24,11 @@ import Locales from '../i18n/Locales';
 class GamesSessionsReductions {
   assignedGamesSessionsRequested(state) {
     return Object.assign({}, state, {
-      assignedSessions: {
-        requested: true,
+      sessionsRequested: true,
+      activeSessions: {
+        sessions: []
+      },
+      inactiveSessions: {
         sessions: []
       }
     });
@@ -35,11 +38,49 @@ class GamesSessionsReductions {
     Locales.addLocales(action.messages);
 
     return Object.assign({}, state, {
-      assignedSessions: {
-        requested: false,
-        sessions: action.sessions
+      sessionsRequested: false,
+      activeSessions: {
+        sessions: action.sessions.filter(session => session.isActive())
+      },
+      inactiveSessions: {
+        sessions: action.sessions.filter(session => !session.isActive())
       }
     });
+  }
+
+  gameFinished(state, action) {
+    return Reducer.propertyPartialModification(state, 'activeGame', {
+      results: [...state.activeGame.results, action.gameResult]
+    });
+  }
+
+  gameResultStorageRequested(state, action) {
+    return Reducer.propertyPartialModification(state, 'activeGame', {
+      results: GamesSessionsReducer._removeFromArray(state.activeGame.results, action.gameResult),
+      resultsBeingStored: [...state.activeGame.resultsBeingStored, action.gameResult]
+    });
+  }
+
+  gameResultStored(state, action) {
+    action.gameResult.assignedGamesSession.addResult(action.gameResult);
+
+    return Reducer.propertyPartialModification(state, 'activeGame', {
+      resultsBeingStored: GamesSessionsReducer._removeFromArray(state.activeGame.resultsBeingStored, action.gameResult)
+    });
+  }
+
+  static _removeFromArray(array, value) {
+    const index = array.indexOf(value);
+
+    if (index === -1) {
+      throw new Error('value not found in array');
+    }
+
+    const arrayCopy = [...array];
+
+    arrayCopy.splice(index, 1);
+
+    return arrayCopy;
   }
 }
 

@@ -26,6 +26,7 @@ import GamesSessionActions from '../actions/GamesSessionActions';
 import AssignedGamesSession from '@sing-group/mtc-games/src/games_session/AssignedGamesSession';
 import GameBuilder from '@sing-group/mtc-games/src/game/GameBuilder';
 import GamesSessionMetadata from '@sing-group/mtc-games/src/games_session/GamesSessionMetadata';
+import GameResult from '@sing-group/mtc-games/src/games_session/GameResult';
 
 import check from 'check-types';
 
@@ -44,8 +45,11 @@ export default class GamesSessionEndpoint {
     const path = this._pathBuilder.assignedSessions(username);
 
     this._rest.get(path)
-      .then(response => Promise.all(response.data.map(assignedSession =>
-          this._completeAssignedGamesSessionJson(assignedSession)
+      .then(response => Promise.all(response.data.map(assignedSessionJson =>
+        this._completeGameResults(assignedSessionJson)
+      )))
+      .then(assignedSessionsJson => Promise.all(assignedSessionsJson.map(assignedSessionJson =>
+          this._completeAssignedGamesSessionJson(assignedSessionJson)
       )))
       .then(assignedSessions => {
         assignedSessions = this._mergeData(assignedSessions);
@@ -55,6 +59,16 @@ export default class GamesSessionEndpoint {
             assignedSessions.sessions, assignedSessions.messages
           ));
       });
+  }
+
+  _completeGameResults(sessionJson) {
+    return Promise.all(sessionJson.result.map(
+     result => this._rest.get(result.uri)
+    ))
+    .then(responses => {
+      sessionJson.result = responses.map(response => response.data);
+      return sessionJson;
+    });
   }
 
   _completeAssignedGamesSessionJson(sessionJson) {
@@ -75,7 +89,8 @@ export default class GamesSessionEndpoint {
       return this._mapJsonToGameConfig(gameConfig)
     });
 
-    return new AssignedGamesSession(
+    const session = new AssignedGamesSession(
+      sessionJson.id,
       new GamesSessionMetadata(
         `session.${gamesSession.id}.name`,
         `session.${gamesSession.id}.description`,
@@ -85,6 +100,19 @@ export default class GamesSessionEndpoint {
       new Date(sessionJson.endDate),
       []
     );
+
+    sessionJson.result.forEach(result => session.addResult(
+      new GameResult(
+        session,
+        result.gameIndex,
+        result.attempt,
+        new Date(result.startDate),
+        new Date(result.endDate),
+        this._mapResults(result.results)
+      )
+    ));
+
+    return session;
   }
 
   _mapJsonToGameConfig(gameConfigJson) {
@@ -104,6 +132,13 @@ export default class GamesSessionEndpoint {
     const descriptions = this._mapMessages(`session.${gamesSession.id}.description`, gamesSession.description.values);
 
     return this._mergeMessages(names, descriptions);
+  }
+
+  _mapResults(results) {
+    return results.values.map(value => ({
+      [value.key]: value.value
+    }))
+    .reduce((v1, v2) => Object.assign(v1, v2), {});
   }
 
   _mapMessages(type, messages) {

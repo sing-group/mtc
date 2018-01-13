@@ -1,11 +1,11 @@
 {
   "name": "@sing-group/mtc",
-  "version": "0.1.0-alpha9",
+  "version": "0.1.0-alpha10",
   "description": "MultiTasking Cubes - A tool for cognitive stimulation",
   "license": "GPL-3.0",
   "author": {
-      "name": "Miguel Reboiro-Jato",
-      "email": "mrjato@uvigo.es"
+    "name": "Miguel Reboiro-Jato",
+    "email": "mrjato@uvigo.es"
   },
   "contributors": [
     "Adolfo Piñón Blanco",
@@ -53,7 +53,7 @@
     "webpack": "2.7.0"
   },
   "dependencies": {
-    "@sing-group/mtc-games": "0.1.0-alpha.27",
+    "@sing-group/mtc-games": "0.1.0-alpha.28",
     "apisauce": "0.14.3",
     "bootstrap": "3.3.7",
     "check-types": "7.3.0",

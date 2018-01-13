@@ -47,17 +47,19 @@ import EndpointPathBuilder from '../endpoint/EndpointPathBuilder';
 import JsonRestBroker from '../endpoint/JsonRestBroker';
 
 import GamesSessionEndpoint from '../endpoint/GamesSessionEndpoint';
+import GameResultEndpoint from '../endpoint/GameResultEndpoint';
 import UserEndpoint from '../endpoint/UserEndpoint';
 
-import GamesSessionsController from '../controllers/GamesSessionsController';
 import LoginController from '../controllers/LoginController';
+import GameResultController from '../controllers/GameResultController';
+import GamesSessionsController from '../controllers/GamesSessionsController';
 
 import { API_URL } from '../configuration/configuration';
 
 
 WebFontLoader.load({
   google: {
-    families: ['Roboto:400,300,500:latin']
+    families: ['Roboto:400,300,500:latin', 'Material+Icons']
   }
 });
 
@@ -85,13 +87,16 @@ const store = createStore(
       menu: {
         showMainMenu: false
       },
-      assignedSessions: {
-        requested: false,
+      sessionsRequested: false,
+      activeSessions: {
         sessions: []
       },
-      completedSessions: {
-        requested: false,
+      inactiveSessions: {
         sessions: []
+      },
+      activeGame: {
+        results: [],
+        resultsBeingStored: []
       }
     },
     intl: {
@@ -106,12 +111,15 @@ const restBroker = new JsonRestBroker(API_URL, () => store.getState().mtc.user.t
 const endpointPathBuilder = new EndpointPathBuilder();
 
 const userEndpoint = new UserEndpoint(endpointPathBuilder, restBroker, store);
+const gameResultEndpoint = new GameResultEndpoint(endpointPathBuilder, restBroker, store);
 const gamesSessionEndpoint = new GamesSessionEndpoint(endpointPathBuilder, restBroker, store);
 
 const loginController = new LoginController(userEndpoint);
+const gameResultController = new GameResultController(gameResultEndpoint);
 const gamesSessionController = new GamesSessionsController(gamesSessionEndpoint);
 
 loginController.subscribeTo(store);
+gameResultController.subscribeTo(store);
 gamesSessionController.subscribeTo(store);
 
 ReactDOM.render(

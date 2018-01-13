@@ -42,10 +42,15 @@ export default class SessionPanel extends Component {
     return {
       sessionsRequested: PropTypes.bool,
       sessions: PropTypes.arrayOf(PropTypes.instanceOf(AssignedGamesSession)).isRequired,
-      onComponentWillMount: PropTypes.func,
       intl: PropTypes.shape({
         formatMessage: PropTypes.func.isRequired
       }),
+      muiTheme: PropTypes.shape({
+        palette: PropTypes.object.isRequired
+      }),
+      onComponentWillMount: PropTypes.func,
+      onGameStarted: PropTypes.func,
+      onGameFinished: PropTypes.func,
       animated: PropTypes.bool,
       cardMd: PropTypes.number,
       cardLg: PropTypes.number,
@@ -59,6 +64,8 @@ export default class SessionPanel extends Component {
       sessionsRequested: false,
       sessions: [],
       onComponentWillMount: () => {},
+      onGameStarted: () => {},
+      onGameFinished: () => {},
       cardMd: 8,
       cardLg: 6,
       cardMdOffset: 2,
@@ -81,6 +88,7 @@ export default class SessionPanel extends Component {
     } else {
       const listProps = Object.assign({}, this.props);
       delete listProps.sessionsRequested;
+      delete listProps.onComponentWillMount;
 
       return <SessionList {...listProps}/>;
     }

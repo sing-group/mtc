@@ -18,16 +18,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-export default class EndpointPathBuilder {
-  login(username, password) {
-    return `/user/role?login=${username}&password=${password}`;
+import StoreListener from './StoreListener';
+
+import GameResultEndpoint from '../endpoint/GameResultEndpoint';
+
+import check from 'check-types';
+
+export default class GameResultController {
+  constructor(endpoint) {
+    check.assert.instance(endpoint, GameResultEndpoint, 'endpoint should be an instance of GameResultEndpoint');
+
+    this._endpoint = endpoint;
   }
 
-  assignedSessions(username) {
-    return `/patient/${username}/games-session/assigned`;
-  }
+  subscribeTo(store) {
+    const storeListener = new StoreListener(store);
 
-  gameResult(username, assignedSessionId, gameIndex) {
-    return `/patient/${username}/games-session/assigned/${assignedSessionId}/game/${gameIndex}/result`;
+    storeListener.listen(
+      state => state.mtc.activeGame.results,
+      (gameResults, _, state) => {
+        if (gameResults.length > 0) {
+          this._endpoint.addResult(state.mtc.user.username, gameResults[0]);
+        }
+      }
+    );
   }
 }

@@ -35,9 +35,9 @@ export default class GamesSessionsController {
     const storeListener = new StoreListener(store);
 
     storeListener.listen(
-      state => state.mtc.assignedSessions.requested,
-      (assignedSessionsRequested, _, state) => {
-        if (assignedSessionsRequested) {
+      state => state.mtc.sessionsRequested,
+      (sessionsRequested, _, state) => {
+        if (sessionsRequested) {
           this._endpoint.getAssignedSessions(state.mtc.user.username);
         }
       }

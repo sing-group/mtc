@@ -18,7 +18,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+import check from 'check-types';
+
 export default class Reducer {
+  static propertyPartialModification(state, property, values) {
+    check.assert.object(state, 'state should be an object');
+    check.assert.nonEmptyString(property, 'property should be a non empty string');
+    check.assert.assigned(state[property], 'property should be a valid property of state');
+    check.assert.object(values, 'values should be an object');
+
+    return Object.assign({}, state, {
+      [property]: Object.assign({}, state[property], values)
+    });
+  }
+
   static chain(...reducers) {
     const chain = reducers.reverse().reduce((reducerA, reducerB) => {
       reducerB.reducer = reducerA;

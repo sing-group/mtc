@@ -32,12 +32,15 @@ import {
   StepLabel,
   StepContent,
 } from 'material-ui/Stepper';
+import FontIcon from 'material-ui/FontIcon';
 
 import GamePanel from '../games/GamePanel';
 
 import Locales from '../../i18n/Locales';
 import Messages from '../../i18n/Messages';
-import AssignedGamesSession from '../../../../mtc-games/src/games_session/AssignedGamesSession';
+
+import AssignedGamesSession from '@sing-group/mtc-games/src/games_session/AssignedGamesSession';
+import GameResult from '@sing-group/mtc-games/src/games_session/GameResult';
 
 export const style = {
   actions: {
@@ -50,6 +53,15 @@ export const style = {
     fontWeight: 'bold',
     borderTopLeftRadius: '10px',
     borderTopRightRadius: '10px'
+  },
+  finished: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    verticalAlign: 'middle'
+  },
+  finishedIcon: {
+    verticalAlign: 'middle'
   },
   dialog: {
     maxWidth: 'none',
@@ -64,7 +76,19 @@ export default class SessionCard extends Component {
       intl: PropTypes.shape({
         formatMessage: PropTypes.func.isRequired,
         locale: PropTypes.string.isRequired
-      })
+      }),
+      muiTheme: PropTypes.shape({
+        palette: PropTypes.object.isRequired
+      }),
+      onGameStarted: PropTypes.func,
+      onGameFinished: PropTypes.func
+    };
+  }
+
+  static get defaultProps() {
+    return {
+      onGameStarted: () => {},
+      onGameFinished: () => {}
     };
   }
 
@@ -85,81 +109,114 @@ export default class SessionCard extends Component {
     };
   }
 
-  componentDidMount() {
-    if (!this.isGameCompleted()) {
-      this.updateWindowDimensions();
-      window.addEventListener('resize', this.updateWindowDimensions.bind(this));
-    }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateWindowDimensions.bind(this));
-  }
-
-  updateWindowDimensions() {
+  handleOpenDialog() {
     this.setState(Object.assign({}, this.state, {
-      width: window.innerWidth,
-      height: window.innerHeight
+      showDialog: true
     }));
   }
 
-  handleOpenDialog() {
-    this.setState({
-      showDialog: true
-    });
-  }
-
   handleCloseDialog() {
-    this.setState({
+    this.setState(Object.assign({}, this.state, {
       showDialog: false
+    }));
+  }
+
+  handleGameStarted(gameConfig) {
+    this.setState(Object.assign({}, this.state, {
+      activeGame: gameConfig,
+      gameStartTime: new Date()
+    }));
+
+    this.props.onGameStarted(this.props.session, gameConfig);
+  }
+
+  handleGameFinished(result) {
+    const gameResult = new GameResult(
+      this.props.session,
+      this.props.session.getGameIndex(this.state.activeGame),
+      this.props.session.countResultsOfGame(this.state.activeGame) + 1,
+      this.state.gameStartTime,
+      new Date,
+      result
+    );
+
+    this.props.onGameFinished(gameResult);
+
+    this.setState({
+      showDialog: this.state.showDialog
     });
   }
 
-  isGameCompleted() {
+  isSessionCompleted() {
     return this.props.session.isCompleted();
   }
 
+  isSessionActive() {
+    return this.props.session.isActive();
+  }
+
+  isGameCompleted(game) {
+    return this.props.session.isGameCompleted(game);
+  }
+
   getNextPendingGameConfigured() {
-    if (this.isGameCompleted()) {
+    if (this.isSessionCompleted()) {
       return null;
     } else {
       const {intl} = this.props;
       const gameConfig = this.getNextPendingGame();
 
-      gameConfig.height = this.state.height * 0.6;
-      gameConfig.width = this.state.width * 0.6;
+      gameConfig.height = window.innerHeight * 0.6;
+      gameConfig.width = window.innerWidth * 0.6;
       gameConfig.domId = SessionCard._guid();
       gameConfig.i18n = Locales.getI18NForLocale(intl.locale);
       gameConfig.locale = Locales.mapMtcToMtcGamesId(intl.locale);
+
+      gameConfig.gameCallback = {
+        gameStarted: () => this.handleGameStarted(gameConfig),
+        gameFinished: result => this.handleGameFinished(result)
+      };
 
       return gameConfig;
     }
   }
 
   getNextPendingGame() {
-    if (this.isGameCompleted()) {
+    if (this.isSessionCompleted()) {
       return null;
     } else {
       return this.props.session.nextPendingGame();
     }
   }
 
+  getNextPendingGameIndex() {
+    if (this.isSessionCompleted()) {
+      return null;
+    } else {
+      return this.props.session.nextPendingGameIndex();
+    }
+  }
+
   getNextPendingGameNameMessage() {
-    if (this.isGameCompleted()) {
+    if (this.isSessionCompleted()) {
       return Messages.gameTitle();
     } else {
       return Messages.gameName(this.getNextPendingGame().metadata.nameId);
     }
   }
 
+  isSessionStarted() {
+    return this.props.session.countCompletedGames() !== 0;
+  }
+
   render() {
-    const {session, intl} = this.props;
+    const {session, intl, muiTheme} = this.props;
 
     const games = session.metadata.gameConfigs;
 
     let index = 0;
     const steps = games.map(game => {
-      return <Step key={game.metadata.nameId + index++}>
+      return <Step key={game.metadata.nameId + index++} completed={this.isGameCompleted(game)}>
         <StepLabel>
           <FormattedMessage id={game.metadata.nameId}/>
         </StepLabel>
@@ -173,6 +230,11 @@ export default class SessionCard extends Component {
       <FlatButton key={index++} label={<FormattedMessage id="game.exit"/>} primary={true} onClick={this.handleCloseDialog.bind(this)}/>
     ];
 
+    const playMessage = this.isSessionStarted() ? 'session.continue' : 'session.start';
+
+    const completeStyle = Object.assign({}, style.finished, {color: muiTheme.palette.primary1Color});
+    const notCompletedStyle = Object.assign({}, style.finished, {color: muiTheme.palette.accent1Color});
+
     return <div>
       <Card style={style.card} containerStyle={style.card}>
         <CardTitle
@@ -182,30 +244,44 @@ export default class SessionCard extends Component {
           </span>}
           style={style.title}
         />
-        
+
         <CardText>
           <FormattedMessage id={session.metadata.descriptionId} />
           <div>
-            <Stepper activeStep={0} orientation="vertical">
+            <Stepper activeStep={this.getNextPendingGameIndex()} orientation="vertical" linear={!this.isSessionCompleted()}>
               {steps}
             </Stepper>
           </div>
         </CardText>
-        
-        {!this.isGameCompleted() &&
+
         <LinearProgress mode="determinate"
                         value={session.countCompletedGames()}
                         max={session.countGames()}/>
-        }
-        
-        {!this.isGameCompleted() &&
+
+        {this.isSessionActive() && !this.isSessionCompleted() &&
         <CardActions style={style.actions}>
-          <FlatButton label={<FormattedMessage id="game.start"/>} onClick={this.handleOpenDialog.bind(this)}/>
+          <FlatButton label={<FormattedMessage id={playMessage}/>} onClick={this.handleOpenDialog.bind(this)}/>
         </CardActions>
+        }
+
+        {!this.isSessionActive() && !this.isSessionCompleted() &&
+        <CardActions style={notCompletedStyle}>
+          <FontIcon className="material-icons" color={muiTheme.palette.accent1Color} style={style.finishedIcon}>report</FontIcon>
+          &nbsp;
+          <FormattedMessage id="session.notCompleted"/>
+        </CardActions>
+        }
+
+        {this.isSessionCompleted() &&
+        <CardText style={completeStyle}>
+          <FontIcon className="material-icons" color={muiTheme.palette.primary1Color} style={style.finishedIcon}>check_circle</FontIcon>
+          &nbsp;
+          <FormattedMessage id="session.completed"/>
+        </CardText>
         }
       </Card>
 
-      {!this.isGameCompleted() &&
+      {!this.isSessionCompleted() &&
       <Dialog
         title={intl.formatMessage(this.getNextPendingGameNameMessage())}
         actions={dialogActions}

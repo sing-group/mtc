@@ -31,12 +31,15 @@ const es_ES = {
   'login.changeLanguage': 'Cambiar Idioma',
   'login.invalidCredentials': 'Usuario o contraseña no válidos',
   'game.title': 'Juego',
-  'game.start': 'Empezar',
   'game.exit': 'Salir',
-  'sessions.opened': 'Sesiones pendientes',
-  'sessions.completed': 'Sesiones completas',
-  'sessions.title': "Sesiones de Juegos",
-  'sessions.empty': "No se ha encontrado ninguna sesión de juegos."
+  'session.start': 'Comenzar sesión',
+  'session.continue': 'Continuar sesión',
+  'session.completed': 'Completa',
+  'session.notCompleted': 'No completada',
+  'sessions.active': 'Sesiones activas',
+  'sessions.inactive': 'Sesiones finalizadas',
+  'sessions.title': 'Sesiones de Juegos',
+  'sessions.empty': 'No se ha encontrado ninguna sesión de juegos.'
 };
 
 export default es_ES;

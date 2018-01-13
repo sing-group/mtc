@@ -126,10 +126,10 @@ export default class Header extends React.Component {
                   onRightIconButtonClick={this.handleMainMenuToggle.bind(this)}
           />
           <MenuItem onClick={() => this.handleRouteChange('/') }>
-            <FormattedMessage id="sessions.opened"/>
+            <FormattedMessage id="sessions.active"/>
           </MenuItem>
-          <MenuItem onClick={() => this.handleRouteChange('/completed') }>
-            <FormattedMessage id="sessions.completed"/>
+          <MenuItem onClick={() => this.handleRouteChange('/finished') }>
+            <FormattedMessage id="sessions.inactive"/>
           </MenuItem>
         </Drawer>
       </div>

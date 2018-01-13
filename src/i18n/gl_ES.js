@@ -31,12 +31,15 @@ const gl_ES = {
   'login.changeLanguage': 'Cambiar Linguaxe',
   'login.invalidCredentials': 'Usuario ou contrasinal non válidos',
   'game.title': 'Xogo',
-  'game.start': 'Comezar',
   'game.exit': 'Saír',
-  'sessions.opened': 'Sesións pendentes',
-  'sessions.completed': 'Sesiones completas',
-  'sessions.title': "Sesións de Xogos",
-  'sessions.empty': "Non se atopou ningunha sesión de xogos."
+  'session.start': 'Comezar sesión',
+  'session.continue': 'Continuar sesión',
+  'session.completed': 'Completa',
+  'session.notCompleted': 'Non completada',
+  'sessions.active': 'Sesións activas',
+  'sessions.inactive': 'Sesións finalizadas',
+  'sessions.title': 'Sesións de Xogos',
+  'sessions.empty': 'Non se atopou ningunha sesión de xogos.'
 };
 
 export default gl_ES;

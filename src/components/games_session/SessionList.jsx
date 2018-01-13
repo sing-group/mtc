@@ -46,29 +46,44 @@ export const style = {
 };
 
 export default class SessionList extends React.Component {
-  static get defaultProps() {
-    return {
-      cardMd: 8,
-      cardLg: 6,
-      cardMdOffset: 2,
-      cardLgOffset: 3,
-      animated: true,
-      sessions: []
-    };
-  }
-
   static get propTypes() {
     return {
       sessions: PropTypes.arrayOf(PropTypes.instanceOf(AssignedGamesSession)).isRequired,
       intl: PropTypes.shape({
         formatMessage: PropTypes.func.isRequired
       }),
+      muiTheme: PropTypes.shape({
+        palette: PropTypes.object.isRequired
+      }),
+      onGameStarted: PropTypes.func,
+      onGameFinished: PropTypes.func,
       animated: PropTypes.bool,
       cardMd: PropTypes.number,
       cardLg: PropTypes.number,
       cardMdOffset: PropTypes.number,
       cardLgOffset: PropTypes.number
     };
+  }
+
+  static get defaultProps() {
+    return {
+      sessions: [],
+      onGameStarted: () => {},
+      onGameFinished: () => {},
+      cardMd: 8,
+      cardLg: 6,
+      cardMdOffset: 2,
+      cardLgOffset: 3,
+      animated: true
+    };
+  }
+
+  handleGameStarted(assignedGamesSession, gameConfig) {
+    this.props.onGameStarted(assignedGamesSession, gameConfig);
+  }
+
+  handleGameFinished(gameResult) {
+    this.props.onGameFinished(gameResult);
   }
 
   _paperStyle(index) {
@@ -119,7 +134,12 @@ export default class SessionList extends React.Component {
                    lgOffset={this.props.cardLgOffset}
               >
                 <Paper style={this._paperStyle(index)} zDepth={2} className={paperClass}>
-                  <SessionCard session={session} intl={this.props.intl}/>
+                  <SessionCard session={session}
+                               intl={this.props.intl}
+                               onGameStarted={this.handleGameStarted.bind(this)}
+                               onGameFinished={this.handleGameFinished.bind(this)}
+                               muiTheme={this.props.muiTheme}
+                  />
                 </Paper>
               </Col>
             </Row>

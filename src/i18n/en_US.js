@@ -31,12 +31,15 @@ const en_US = {
   'login.changeLanguage': 'Change Language',
   'login.invalidCredentials': 'Invalid user or password',
   'game.title': 'Game',
-  'game.start': 'Start',
   'game.exit': 'Exit',
-  'sessions.opened': 'Open sessions',
-  'sessions.completed': 'Completed sessions',
-  'sessions.title': "Game Sessions",
-  'sessions.empty': "No game sessions found."
+  'session.start': 'Start session',
+  'session.continue': 'Continue session',
+  'session.completed': 'Completed',
+  'session.notCompleted': 'Not completed',
+  'sessions.active': 'Active sessions',
+  'sessions.inactive': 'Finished sessions',
+  'sessions.title': 'Game Sessions',
+  'sessions.empty': 'No game sessions found.'
 };
 
 export default en_US;

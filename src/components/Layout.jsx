@@ -32,6 +32,8 @@ import {
   Redirect
 } from 'react-router-dom';
 
+import muiThemeable from 'material-ui/styles/muiThemeable';
+
 import Header from './Header';
 import Login from './Login';
 import SessionPanel from './games_session/SessionPanel';
@@ -45,20 +47,29 @@ const mapStateToPropsLayout = state => ({
   isLoggedIn: state.mtc.user.isLoggedIn
 });
 
-const mapStateToPropsSessionList = state => ({
-  sessions: state.mtc.assignedSessions.sessions,
-  sessionsRequested: state.mtc.assignedSessions.requested
-});
-
-const mapDispatchToPropsSessionList = dispatch => ({
+const mapDispatchToPropsLayout = dispatch => ({
   onComponentWillMount: () => {
     dispatch(GamesSessionActions.assignedGamesSessionsRequested());
   }
 });
 
+const mapStateToPropsSessionList = state => ({
+  sessions: state.mtc.activeSessions.sessions,
+  sessionsRequested: state.mtc.sessionsRequested
+});
+
+const mapDispatchToPropsSessionList = dispatch => ({
+  onGameStarted: (assignedGamesSession, gameConfig) => {
+    dispatch(GamesSessionActions.gameStarted(assignedGamesSession, gameConfig));
+  },
+  onGameFinished: gameResult => {
+    dispatch(GamesSessionActions.gameFinished(gameResult));
+  }
+});
+
 const mapStateToPropsCompletedSessionList = state => ({
-  sessions: state.mtc.completedSessions.sessions,
-  sessionsRequested: state.mtc.completedSessions.requested
+  sessions: state.mtc.inactiveSessions.sessions,
+  sessionsRequested: state.mtc.sessionsRequested
 });
 
 const mapStateToPropsHeader = state => ({
@@ -101,20 +112,25 @@ const ConnectedHeader = injectIntl(withRouter(connect(
   mapDispatchToPropsHeader
 )(Header)));
 
-const ConnectedSessionList = injectIntl(connect(
+const ConnectedSessionList = muiThemeable()(injectIntl(connect(
   mapStateToPropsSessionList,
   mapDispatchToPropsSessionList
-)(SessionPanel));
+)(SessionPanel)));
 
-const ConnectedCompletedSessionList = injectIntl(connect(
+const ConnectedCompletedSessionList = muiThemeable()(injectIntl(connect(
   mapStateToPropsCompletedSessionList
-)(SessionPanel));
+)(SessionPanel)));
 
 class Layout extends React.Component {
   static get propTypes() {
     return {
-      isLoggedIn: PropTypes.bool.isRequired
+      isLoggedIn: PropTypes.bool.isRequired,
+      onComponentWillMount: PropTypes.func,
     };
+  }
+
+  componentWillMount() {
+    this.props.onComponentWillMount();
   }
 
   render() {
@@ -124,7 +140,7 @@ class Layout extends React.Component {
           <ConnectedHeader/>
           <Switch>
             <Route exact path="/" component={ConnectedSessionList}/>
-            <Route exact path="/completed" component={ConnectedCompletedSessionList}/>
+            <Route exact path="/finished" component={ConnectedCompletedSessionList}/>
             <Redirect to="/"/>
           </Switch>
         </div>
@@ -141,5 +157,6 @@ class Layout extends React.Component {
 }
 
 export default injectIntl(connect(
-  mapStateToPropsLayout
+  mapStateToPropsLayout,
+  mapDispatchToPropsLayout
 )(Layout));
