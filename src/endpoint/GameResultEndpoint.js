@@ -41,7 +41,7 @@ export default class GameResultEndpoint {
   addResult(username, gameResult) {
     check.assert.instance(gameResult, GameResult, 'gameResult should be an instance of GameResult');
 
-    GamesSessionActions.gameResultStorageRequested(gameResult);
+    this._store.dispatch(GamesSessionActions.gameResultStorageRequested(gameResult));
 
     const path = this._pathBuilder.gameResult(username, gameResult.assignedGamesSession.id, gameResult.gameIndex);
 

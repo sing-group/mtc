@@ -21,8 +21,8 @@
 import React, {Component} from 'react';
 import PropTypes from "prop-types";
 
-import GameConfig from '../../../../mtc-games/src/game/GameConfig';
-import GameBuilder from '../../../../mtc-games/src/game/GameBuilder';
+import GameConfig from '@sing-group/mtc-games/src/game/GameConfig';
+import GameBuilder from '@sing-group/mtc-games/src/game/GameBuilder';
 
 export default class GamePanel extends Component {
   static get propTypes() {

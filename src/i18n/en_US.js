@@ -36,6 +36,7 @@ const en_US = {
   'session.continue': 'Continue session',
   'session.completed': 'Completed',
   'session.notCompleted': 'Not completed',
+  'session.notOpen': 'Not yet open',
   'sessions.active': 'Active sessions',
   'sessions.inactive': 'Finished sessions',
   'sessions.title': 'Game Sessions',

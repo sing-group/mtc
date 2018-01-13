@@ -31,7 +31,7 @@ import Paper from 'material-ui/Paper';
 
 import SessionCard, {style as sessionCardStyle} from './SessionCard';
 
-import AssignedGamesSession from '../../../../mtc-games/src/games_session/AssignedGamesSession';
+import AssignedGamesSession from '@sing-group/mtc-games/src/games_session/AssignedGamesSession';
 
 export const style = {
   column: {

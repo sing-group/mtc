@@ -36,6 +36,7 @@ const gl_ES = {
   'session.continue': 'Continuar sesión',
   'session.completed': 'Completa',
   'session.notCompleted': 'Non completada',
+  'session.notOpen': 'Aínda non está aberta',
   'sessions.active': 'Sesións activas',
   'sessions.inactive': 'Sesións finalizadas',
   'sessions.title': 'Sesións de Xogos',

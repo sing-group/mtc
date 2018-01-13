@@ -25,7 +25,7 @@ import CircularProgress from 'material-ui/CircularProgress';
 
 import SessionList from './SessionList';
 
-import AssignedGamesSession from '../../../../mtc-games/src/games_session/AssignedGamesSession';
+import AssignedGamesSession from '@sing-group/mtc-games/src/games_session/AssignedGamesSession';
 
 const style = {
   container: {

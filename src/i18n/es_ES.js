@@ -36,6 +36,7 @@ const es_ES = {
   'session.continue': 'Continuar sesión',
   'session.completed': 'Completa',
   'session.notCompleted': 'No completada',
+  'session.notOpen': 'Todavía no está abierta',
   'sessions.active': 'Sesiones activas',
   'sessions.inactive': 'Sesiones finalizadas',
   'sessions.title': 'Sesiones de Juegos',

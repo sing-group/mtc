@@ -22,6 +22,18 @@ import Reducer from './Reducer';
 import Locales from '../i18n/Locales';
 
 class GamesSessionsReductions {
+  static _compareSessions(s1, s2) {
+    if (s1.endDate === s2.endDate) {
+      if (s1.startDate === s2.startDate) {
+        return s1.id - s2.id;
+      } else {
+        return s1.startDate < s2.startDate ? -1 : 1;
+      }
+    } else {
+      return s1.endDate < s2.endDate ? -1 : 1;
+    }
+  }
+
   assignedGamesSessionsRequested(state) {
     return Object.assign({}, state, {
       sessionsRequested: true,
@@ -41,9 +53,11 @@ class GamesSessionsReductions {
       sessionsRequested: false,
       activeSessions: {
         sessions: action.sessions.filter(session => session.isActive())
+          .sort(GamesSessionsReductions._compareSessions)
       },
       inactiveSessions: {
         sessions: action.sessions.filter(session => !session.isActive())
+          .sort(GamesSessionsReductions._compareSessions)
       }
     });
   }

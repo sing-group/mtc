@@ -54,13 +54,13 @@ export const style = {
     borderTopLeftRadius: '10px',
     borderTopRightRadius: '10px'
   },
-  finished: {
+  sessionStatus: {
     textAlign: 'center',
     fontWeight: 'bold',
     textTransform: 'uppercase',
     verticalAlign: 'middle'
   },
-  finishedIcon: {
+  sessionStatusIcon: {
     verticalAlign: 'middle'
   },
   dialog: {
@@ -150,6 +150,10 @@ export default class SessionCard extends Component {
   isSessionCompleted() {
     return this.props.session.isCompleted();
   }
+  
+  isSessionOpen() {
+    return this.props.session.isOpen();
+  }
 
   isSessionActive() {
     return this.props.session.isActive();
@@ -232,8 +236,9 @@ export default class SessionCard extends Component {
 
     const playMessage = this.isSessionStarted() ? 'session.continue' : 'session.start';
 
-    const completeStyle = Object.assign({}, style.finished, {color: muiTheme.palette.primary1Color});
-    const notCompletedStyle = Object.assign({}, style.finished, {color: muiTheme.palette.accent1Color});
+    const notOpenStyle = Object.assign({}, style.sessionStatus, {color: muiTheme.palette.primary3Color});
+    const completeStyle = Object.assign({}, style.sessionStatus, {color: muiTheme.palette.primary1Color});
+    const notCompletedStyle = Object.assign({}, style.sessionStatus, {color: muiTheme.palette.accent1Color});
 
     return <div>
       <Card style={style.card} containerStyle={style.card}>
@@ -258,7 +263,15 @@ export default class SessionCard extends Component {
                         value={session.countCompletedGames()}
                         max={session.countGames()}/>
 
-        {this.isSessionActive() && !this.isSessionCompleted() &&
+        {this.isSessionActive() && !this.isSessionOpen() &&
+        <CardActions style={notOpenStyle}>
+          <FontIcon className="material-icons" color={muiTheme.palette.primary3Color} style={style.sessionStatusIcon}>alarm</FontIcon>
+          &nbsp;
+          <FormattedMessage id="session.notOpen"/>
+        </CardActions>
+        }
+
+        {this.isSessionOpen() && !this.isSessionCompleted() &&
         <CardActions style={style.actions}>
           <FlatButton label={<FormattedMessage id={playMessage}/>} onClick={this.handleOpenDialog.bind(this)}/>
         </CardActions>
@@ -266,7 +279,7 @@ export default class SessionCard extends Component {
 
         {!this.isSessionActive() && !this.isSessionCompleted() &&
         <CardActions style={notCompletedStyle}>
-          <FontIcon className="material-icons" color={muiTheme.palette.accent1Color} style={style.finishedIcon}>report</FontIcon>
+          <FontIcon className="material-icons" color={muiTheme.palette.accent1Color} style={style.sessionStatusIcon}>report</FontIcon>
           &nbsp;
           <FormattedMessage id="session.notCompleted"/>
         </CardActions>
@@ -274,7 +287,7 @@ export default class SessionCard extends Component {
 
         {this.isSessionCompleted() &&
         <CardText style={completeStyle}>
-          <FontIcon className="material-icons" color={muiTheme.palette.primary1Color} style={style.finishedIcon}>check_circle</FontIcon>
+          <FontIcon className="material-icons" color={muiTheme.palette.primary1Color} style={style.sessionStatusIcon}>check_circle</FontIcon>
           &nbsp;
           <FormattedMessage id="session.completed"/>
         </CardText>
