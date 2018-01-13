@@ -87,7 +87,7 @@ export default class Header extends React.Component {
       showMainMenu
     } = this.props;
 
-    const settingsMenu = (
+    const settingsMenus = (
       <div>
         <LanguageMenu iconButtonElement={<IconButton><ActionLanguage color='white'/></IconButton>}
           intl={intl}
@@ -99,10 +99,6 @@ export default class Header extends React.Component {
                   anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
                   targetOrigin={{horizontal: 'right', vertical: 'top'}}
         >
-          <MenuItem>
-            <FormattedMessage id="settings"/>
-          </MenuItem>
-          <Divider/>
           <MenuItem onClick={this.handleLogout.bind(this)}>
             <FormattedMessage id="exit"/>
           </MenuItem>
@@ -113,7 +109,7 @@ export default class Header extends React.Component {
     return (
       <div>
         <AppBar title="MultiTasking Cubes"
-                iconElementRight={settingsMenu}
+                iconElementRight={settingsMenus}
                 onLeftIconButtonClick={this.handleMainMenuToggle.bind(this)}
         />
         <Drawer open={showMainMenu}
