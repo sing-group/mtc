@@ -1,24 +1,36 @@
-MultiTasking Cubes
-==================
+# MultiTasking Cubes
 
-A tool for cognitive stimulation.
+**MultiTasking Cubes (MTC)** is a project for developing a tool that may be used
+for cognitive rehabilitation, based on the therapeutic game Memomdado,
+developed by Adolfo Piñón Blanco [[1]](#ref1).
 
-Environment Configuration
-=========================
+The **MTC** project the web application where patients can play the sessions
+assigned by their therapist.
 
-After cloning the repository, install dependencies:
-```sh
-npm install
-```
+<a name="ref1">[1]</a> Piñón-Blanco, A. (2010). Memodado. ISBN 13: 
+978-84-608-1120-6. Cadiz: Universidad de Cádiz - Instituto de formación
+interdisciplinar.
 
-Now you can run your local server:
-```sh
-npm start
-```
-Server is located at http://localhost:9000
+## Contributors
+Development team:
+* Andrés Vieira Vázquez
+* Miguel Reboiro-Jato
 
-Note: To allow external viewing of the demo, change the following value in `webpack-dev-server.config.js`
+Research team:
+* Miguel Reboiro-Jato
+* Adolfo Piñón Blanco
+* Hugo López-Fernández
+* Rosalía Laza Fidalgo
+* Reyes Pavón Rial
+* Francisco Otero Lamas
+* Adrián Varela Pomar
+* Carlos Spuch Calvar
+* Tania Rivera Baltanás
 
-```
-host: 'localhost'  //Change to '0.0.0.0' for external facing server
-```
+## License
+This software is distributed under a GNU GPLv3 license. Please, read the
+`LICENSE` file for more information.
+
+## Acknowledgements
+This project was partially funded by the INOU17-04 project from the Provincial
+Council of Ourense and the University of Vigo.
