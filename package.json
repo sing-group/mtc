@@ -1,6 +1,6 @@
 {
   "name": "@sing-group/mtc",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MultiTasking Cubes - A tool for cognitive stimulation",
   "license": "GPL-3.0",
   "author": {
@@ -24,7 +24,7 @@
   },
   "scripts": {
     "start": "webpack --config webpack-dev-server.config.js --progress --colors",
-    "build": "webpack --config webpack-production.config.js --progress --colors",
+    "build": "webpack --config webpack-production.config.js --define process.env.NODE_ENV='\"production\"' --progress --colors",
     "code-check": "./node_modules/eslint/bin/eslint.js src"
   },
   "devDependencies": {
@@ -53,7 +53,7 @@
     "webpack": "2.7.0"
   },
   "dependencies": {
-    "@sing-group/mtc-games": "0.1.0",
+    "@sing-group/mtc-games": "0.1.1",
     "apisauce": "0.14.3",
     "bootstrap": "3.3.7",
     "check-types": "7.3.0",

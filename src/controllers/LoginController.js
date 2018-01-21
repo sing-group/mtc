@@ -25,6 +25,14 @@ import UserEndpoint from '../endpoint/UserEndpoint';
 import check from 'check-types';
 
 export default class LoginController {
+  static get KEY_USERNAME() {
+    return 'mtc.username';
+  }
+
+  static get KEY_TOKEN() {
+    return 'mtc.token';
+  }
+
   constructor(endpoint) {
     check.assert.instance(endpoint, UserEndpoint, 'endpoint should be an instance of UserEndpoint');
 
@@ -37,24 +45,24 @@ export default class LoginController {
   }
 
   static getStoredUsername() {
-    return localStorage.getItem('username');
+    return localStorage.getItem(LoginController.KEY_USERNAME);
   }
 
   static getStoredToken() {
-    return localStorage.getItem('token');
+    return localStorage.getItem(LoginController.KEY_TOKEN);
   }
 
   static setStoredUsername(username) {
-    localStorage.setItem('username', username);
+    localStorage.setItem(LoginController.KEY_USERNAME, username);
   }
 
   static setStoredToken(token) {
-    localStorage.setItem('token', token);
+    localStorage.setItem(LoginController.KEY_TOKEN, token);
   }
 
   static clearStoredCredentials() {
-    localStorage.removeItem('username');
-    localStorage.removeItem('token');
+    localStorage.removeItem(LoginController.KEY_USERNAME);
+    localStorage.removeItem(LoginController.KEY_TOKEN);
   }
 
   subscribeTo(store) {

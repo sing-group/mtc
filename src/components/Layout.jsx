@@ -42,12 +42,13 @@ import MenusActions from '../actions/MenusActions';
 import LoginActions from '../actions/LoginActions';
 import GamesSessionActions from '../actions/GamesSessionActions';
 
+const mapNoStateToProps = () => ({});
 
 const mapStateToPropsLayout = state => ({
   isLoggedIn: state.mtc.user.isLoggedIn
 });
 
-const mapDispatchToPropsLayout = dispatch => ({
+const mapDispatchToPropsMainView = dispatch => ({
   onComponentWillMount: () => {
     dispatch(GamesSessionActions.assignedGamesSessionsRequested());
   }
@@ -121,10 +122,9 @@ const ConnectedCompletedSessionList = muiThemeable()(injectIntl(connect(
   mapStateToPropsCompletedSessionList
 )(SessionPanel)));
 
-class Layout extends React.Component {
+class MainView extends React.Component {
   static get propTypes() {
     return {
-      isLoggedIn: PropTypes.bool.isRequired,
       onComponentWillMount: PropTypes.func,
     };
   }
@@ -134,16 +134,33 @@ class Layout extends React.Component {
   }
 
   render() {
+    return <div>
+      <ConnectedHeader/>
+      <Switch>
+        <Route exact path="/" component={ConnectedSessionList}/>
+        <Route exact path="/finished" component={ConnectedCompletedSessionList}/>
+        <Redirect to="/"/>
+      </Switch>
+    </div>;
+  }
+}
+
+const ConnectedMainView = injectIntl(withRouter(connect(
+  mapNoStateToProps,
+  mapDispatchToPropsMainView
+)(MainView)));
+
+class Layout extends React.Component {
+  static get propTypes() {
+    return {
+      isLoggedIn: PropTypes.bool.isRequired,
+    };
+  }
+
+  render() {
     if (this.props.isLoggedIn) {
       return <Router>
-        <div>
-          <ConnectedHeader/>
-          <Switch>
-            <Route exact path="/" component={ConnectedSessionList}/>
-            <Route exact path="/finished" component={ConnectedCompletedSessionList}/>
-            <Redirect to="/"/>
-          </Switch>
-        </div>
+        <ConnectedMainView/>
       </Router>;
     } else {
       return <Router>
@@ -157,6 +174,5 @@ class Layout extends React.Component {
 }
 
 export default injectIntl(connect(
-  mapStateToPropsLayout,
-  mapDispatchToPropsLayout
+  mapStateToPropsLayout
 )(Layout));
